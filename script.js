@@ -62,12 +62,15 @@ function getComment(){
     // var pageId = Object.keys(PageAccessToken)[0];
     // var accessToken = PageAccessToken[pageId];
     // var postId = url.substr(s.lastIndexOf("/") + 1);
-    FB.api(
-        '/1798713497075922_2301386663475267/comments',
-        'GET',
-        {},
-        function(response) {
-            console.log(response);
-        }
-      );
+    // FB.api(
+    //     '/1798713497075922_2301386663475267/comments',
+    //     'GET',
+    //     {},
+    //     function(response) {
+    //         console.log(response);
+    //     }
+    //   );
+    FB.api('/me', function (response) {
+        console.log('Me: ', response);
+    });
 }
