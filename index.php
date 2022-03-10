@@ -14,6 +14,8 @@
 
 <div id="status">
 </div>
+<input type="text" placeholder="Post URL..." id="input-url"/>
+<input type="button" value="Submit" onclick="getComment()"/>
 
 <!-- Load the JS SDK asynchronously -->
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
