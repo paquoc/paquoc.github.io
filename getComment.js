@@ -117,12 +117,13 @@ function onFetchFinish(){
                 <td>${obj.created_time}</td>
                 <td>${obj.from? obj.from.name : "[empty]"}</td>
                 <td>${obj.message}</td>
-                <td><a href="https://facebook.com/${obj.id}" target="_blank">Comment Link</a></td>
+                <td><a href="https://www.facebook.com/${SessionData.pageId}/posts/${SessionData.postId}?comment_id=${obj.id}" target="_blank">Comment Link</a></td>
             </tr>`
     })
     html += "</tbody>"
     $("#table-comment").html(html);
     $('#table-comment').DataTable({
+        retrieve: true,
         dom: 'lBfrtip',
         buttons: ['copy', 'excel']
     });
