@@ -115,7 +115,7 @@ function onFetchFinish(){
         html += `<tr>
                 <td>${index}</td>
                 <td>${obj.created_time}</td>
-                <td>${obj.from.name}</td>
+                <td>${obj.from? obj.from.name : "[empty]"}</td>
                 <td>${obj.message}</td>
                 <td><a href="https://facebook.com/${obj.id}" target="_blank">Comment Link</a></td>
             </tr>`
