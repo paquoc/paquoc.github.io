@@ -114,7 +114,7 @@ function onFetchFinish(){
     SessionData.commentData.forEach((obj, index) => {
         html += `<tr>
                 <td>${index}</td>
-                <td>${obj.created_time}</td>
+                <td>${formatTime(obj.created_time)}</td>
                 <td>${obj.from? obj.from.name : "[empty]"}</td>
                 <td>${obj.message}</td>
                 <td><a href="https://www.facebook.com/${SessionData.pageId}/posts/${SessionData.postId}?comment_id=${obj.id.substr(obj.id.indexOf("_") + 1)}" target="_blank">Comment Link</a></td>
@@ -128,6 +128,16 @@ function onFetchFinish(){
         buttons: ['copy', 'excel']
     });
     setWaitingEnabled(false);
+}
+
+/**
+ * @param {string} timeStr 2022-03-13T03:22:05+0000
+ * @return {string} 2022-03-13 10:22:05
+ */
+function formatTime(timeStr){
+    var s = new Date(new Date("2022-03-13T03:22:05+0000").getTime() + 3600* 7000).toISOString()
+    //s: 2022-03-13T10:22:05.000Z
+    return s.substr(0, 10) + " " + s.substr(11, 8)
 }
 
 function getPageId(callback){
