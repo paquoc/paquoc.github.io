@@ -135,7 +135,7 @@ function onFetchFinish(){
  * @return {string} 2022-03-13 10:22:05
  */
 function formatTime(timeStr){
-    var s = new Date(new Date("2022-03-13T03:22:05+0000").getTime() + 3600* 7000).toISOString()
+    var s = new Date(new Date(timeStr).getTime() + 3600* 7000).toISOString()
     //s: 2022-03-13T10:22:05.000Z
     return s.substr(0, 10) + " " + s.substr(11, 8)
 }
