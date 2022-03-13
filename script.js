@@ -10,9 +10,9 @@
  */
 var PageAccessToken = {}
 
-$(function (){
-    window.location.href = "./getComment.php"
-})
+// $(function (){
+//     window.location.href = "./getComment.php"
+// })
 
 function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
     console.log('statusChangeCallback');
