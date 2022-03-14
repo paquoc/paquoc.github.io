@@ -75,7 +75,7 @@ function goFetchComment(afterNode = ""){
     let {pageId, postId, accessToken} = SessionData;
     $.ajax({
         method: "GET",
-        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}${afterParam}`,
+        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=1000${afterParam}`,
         success: onFetchComment,
         error: (e)=>{onError(e, "Không lấy được comment");}
     })
@@ -92,7 +92,7 @@ function onFetchComment(response){
     }
 
     SessionData.commentData.push(...response.data);
-    if (response.next){
+    if (response.pading.next){
         let afterNode = response.paging.cursors.after;
         goFetchComment(afterNode);
     } else {
