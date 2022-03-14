@@ -197,8 +197,8 @@ function onFetchFinish(){
     setWaitingEnabled(false);
     let html = "";
     html += `<thead>
-            <th>STT</th>
-            <th style="min-width: 110px">Time</th>
+            <th style="max-width: 20px">STT</th>
+            <th style="width: 110px">Time</th>
             <th>User</th>
             <th>Message</th>
             <th>Number</th>
@@ -210,7 +210,7 @@ function onFetchFinish(){
         html += `<tr>
                 <td>${index}</td>
                 <td>${formatTime(obj.created_time)}</td>
-                <td>${obj.from? obj.from.name : "[empty]"}</td>
+                <td>${obj.from? obj.from.name : ""}</td>
                 <td>${obj.message}</td>
                 <td>${getNumberInMessage(obj.message)}</td>
                 <td class="link-cell"><a href="${link}" target="_blank">${link}k</a></td>
