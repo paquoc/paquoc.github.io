@@ -105,19 +105,20 @@ function onFetchFinish(){
     let html = "";
     html += `<thead>
             <th>STT</th>
-            <th>Time</th>
+            <th style="min-width: 110px">Time</th>
             <th>User</th>
             <th>Message</th>
             <th>Link</th>
         </thead>`;
     html += "<tbody>"
     SessionData.commentData.forEach((obj, index) => {
+        var link = `https://www.facebook.com/${SessionData.pageId}/posts/${SessionData.postId}?comment_id=${obj.id.substr(obj.id.indexOf("_") + 1)}`
         html += `<tr>
                 <td>${index}</td>
                 <td>${formatTime(obj.created_time)}</td>
                 <td>${obj.from? obj.from.name : "[empty]"}</td>
                 <td>${obj.message}</td>
-                <td><a href="https://www.facebook.com/${SessionData.pageId}/posts/${SessionData.postId}?comment_id=${obj.id.substr(obj.id.indexOf("_") + 1)}" target="_blank">Comment Link</a></td>
+                <td class="link-cell"><a href="${link}" target="_blank">${link}k</a></td>
             </tr>`
     })
     html += "</tbody>"
