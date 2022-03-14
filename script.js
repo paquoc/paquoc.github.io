@@ -88,21 +88,19 @@ function getPageList() {                      // Testing Graph API after login. 
         if (response.data.length > 0){
             PageData = response.data;
             createFormSelectPage();
+        } else {
+            $("#section-get-comment").html(`<p>Bạn không quản lý Page nào.</p>`)
         }
     });
 }
 
-function createFormSelectPage(){
-    let divSectionGetComment = $("#section-get-comment");
-    if (PageData.length == 0){
-        divSectionGetComment.html(`<p>Bạn không quản lý Page nào.</p>`)
-    } else {
-        let html = `<form id="form-select-page"><div class="form-group"><label>Chọn trang</label>`;
-        PageData.forEach((pageInfo, index) => {
-            let checked = index == 0? "checked" : "";
-            let namePage = pageInfo.name;
-            let id = pageInfo.id;
-            html += `
+function createFormSelectPage() {
+    let html = `<form id="form-select-page"><div class="form-group"><label>Chọn trang</label>`;
+    PageData.forEach((pageInfo, index) => {
+        let checked = index == 0 ? "checked" : "";
+        let namePage = pageInfo.name;
+        let id = pageInfo.id;
+        html += `
                 <div class="form-check">
                 <input class="form-check-input" type="radio" name="pageOptionRadios" id="option${index}" value="${id}" ${checked}>
                     <label class="form-check-label" for="pageOptionRadios">
@@ -110,9 +108,9 @@ function createFormSelectPage(){
                     </label>
                 </div>
             `;
-        })
-        html += `</div>`;
-        html += `
+    })
+    html += `</div>`;
+    html += `
             <div class="form-group">
                 <label for="post-link">Link bài viết</label>
                 <div class="input-group">
@@ -128,9 +126,8 @@ function createFormSelectPage(){
                 <button name="submit" type="button" class="btn btn-primary" onclick="getComment()">Submit</button>
             </div>
         </form>`
-        html += `<table id="table-comment" class="table"></table>`
-        divSectionGetComment.html(html);
-    }
+    html += `<table id="table-comment" class="table"></table>`
+    $("#section-get-comment").html(html);
 }
 
 function getComment(){
