@@ -32,6 +32,9 @@
 <body>
     <div class="container mt-3">
         <h2>Get Post Comment TOOL</h2>
+        <div class="mb-2" id="btn-logout" style="display: none">
+            <button class="btn btn-primary" onclick="logout()">Log Out</button>
+        </div>
         <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=1258434921313330&autoLogAppEvents=1" nonce="w6xnQUdo"></script>
         <script src="./script.js"></script>
 

@@ -53,7 +53,8 @@ function statusChangeCallback(response) {  // Called with the results from FB.ge
     console.log(response);                   // The current login status of the person.
     if (response.status === 'connected') {   // Logged into your webpage and Facebook.
         getPageList();
-        hideBtnLogin();
+        $(".fb-login-button").hide();
+        $("#btn-logout").show();
     }
 }
 
@@ -262,4 +263,11 @@ function setWaitingEnabled(enabled){
     }
     else body.removeClass(classname);
     $("button[name=submit]").prop("disabled", enabled);
+}
+
+function logout(){
+    FB.logout();
+    $(".fb-login-button").show();
+    $("#btn-logout").hide();
+    $("#section-get-comment").html("");
 }
