@@ -22,40 +22,47 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
+        body {
+            width: 100%;
+            height: 100vh;
+        }
     </style>
 </head>
-<body class="container">
-    <h2>Get Post Comment</h2>
-    <form>
-        <div class="form-group">
-            <label for="access-token">Access Token</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fa fa-key"></i>
+<body>
+    <div class="container">
+        <h2>Get Post Comment</h2>
+        <form>
+            <div class="form-group">
+                <label for="access-token">Access Token</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <i class="fa fa-key"></i>
+                        </div>
                     </div>
+                    <input id="access-token" name="access-token" placeholder="Page Access Token" type="text" class="form-control">
                 </div>
-                <input id="access-token" name="access-token" placeholder="Page Access Token" type="text" class="form-control">
+                <span id="textHelpBlock" class="form-text text-muted">Get Access Token here: <a href="https://developers.facebook.com/tools/explorer" target="_blank">https://developers.facebook.com/tools/explorer</a></span>
             </div>
-            <span id="textHelpBlock" class="form-text text-muted">Get Access Token here: <a href="https://developers.facebook.com/tools/explorer" target="_blank">https://developers.facebook.com/tools/explorer</a></span>
-        </div>
-        <div class="form-group">
-            <label for="post-link">Link bài viết</label>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fa fa-link"></i>
+            <div class="form-group">
+                <label for="post-link">Link bài viết</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <i class="fa fa-link"></i>
+                        </div>
                     </div>
+                    <input id="post-link" name="post-link" type="text" class="form-control">
                 </div>
-                <input id="post-link" name="post-link" type="text" class="form-control">
             </div>
-        </div>
-        <div class="form-group">
-            <button name="submit" type="button" class="btn btn-primary" onclick="getComment()">Submit</button>
-        </div>
+            <div class="form-group">
+                <button name="submit" type="button" class="btn btn-primary" onclick="getComment()">Submit</button>
+            </div>
 
-        <table id="table-comment" class="table">
-        </table>
-    </form>
+            <table id="table-comment" class="table">
+            </table>
+        </form>
+    </div>
 </body>
 </html>

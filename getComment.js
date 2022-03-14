@@ -108,6 +108,7 @@ function onFetchFinish(){
             <th style="min-width: 110px">Time</th>
             <th>User</th>
             <th>Message</th>
+            <th>Number</th>
             <th>Link</th>
         </thead>`;
     html += "<tbody>"
@@ -118,6 +119,7 @@ function onFetchFinish(){
                 <td>${formatTime(obj.created_time)}</td>
                 <td>${obj.from? obj.from.name : "[empty]"}</td>
                 <td>${obj.message}</td>
+                <td>${getNumberInMessage(obj.message)}</td>
                 <td class="link-cell"><a href="${link}" target="_blank">${link}k</a></td>
             </tr>`
     })
@@ -129,6 +131,12 @@ function onFetchFinish(){
         buttons: ['copy', 'excel']
     });
     setWaitingEnabled(false);
+}
+
+function getNumberInMessage(message){
+    if (!message)
+        return "";
+    return message.match("/\d/g").join("")
 }
 
 /**
