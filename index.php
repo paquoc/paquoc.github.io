@@ -17,20 +17,23 @@
         }
     </style>
 </head>
-<body class="container">
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=1258434921313330&autoLogAppEvents=1" nonce="w6xnQUdo"></script>
-    <script src="./script.js"></script>
+<body>
+    <div class="container mt-3">
+        <h2>Get Post Comment TOOL</h2>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=1258434921313330&autoLogAppEvents=1" nonce="w6xnQUdo"></script>
+        <script src="./script.js"></script>
 
-    <div class="fb-login-button"
-         data-width=""
-         data-size="large"
-         data-button-type="login_with"
-         data-layout="default"
-         data-use-continue-as="true"
-         data-onlogin="checkLoginState()"
-         data-scope="pages_show_list, pages_read_engagement, pages_read_user_content"
-    ></div>
+        <div class="fb-login-button"
+             data-width=""
+             data-size="large"
+             data-button-type="login_with"
+             data-layout="default"
+             data-use-continue-as="true"
+             data-onlogin="checkLoginState()"
+             data-scope="pages_show_list, pages_read_engagement, pages_read_user_content"
+        ></div>
 
-    <div id="section-get-comment"></div>
+        <div id="section-get-comment"></div>
+    </div>
 </body>
 </html>

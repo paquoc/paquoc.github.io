@@ -59,10 +59,10 @@
             <div class="form-group">
                 <button name="submit" type="button" class="btn btn-primary" onclick="getComment()">Submit</button>
             </div>
-
-            <table id="table-comment" class="table">
-            </table>
         </form>
+
+        <table id="table-comment" class="table">
+        </table>
     </div>
 </body>
 </html>
