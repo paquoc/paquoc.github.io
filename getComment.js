@@ -136,7 +136,7 @@ function onFetchFinish(){
 function getNumberInMessage(message){
     if (!message)
         return "";
-    var arr = message.match("/\d/g");
+    var arr = message.match(/\d/g);
     if (arr)
         return arr.join("");
     return "";
