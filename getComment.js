@@ -136,7 +136,10 @@ function onFetchFinish(){
 function getNumberInMessage(message){
     if (!message)
         return "";
-    return message.match("/\d/g").join("")
+    var arr = message.match("/\d/g");
+    if (arr)
+        return arr.join("");
+    return "";
 }
 
 /**
