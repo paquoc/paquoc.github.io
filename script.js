@@ -182,7 +182,7 @@ function onFetchComment(response){
     }
 
     SessionData.commentData.push(...response.data);
-    if (response.paging.next){
+    if (response.paging && response.paging.next){
         let afterNode = response.paging.cursors.after;
         goFetchComment(afterNode);
     } else {
