@@ -112,7 +112,7 @@ function createFormSelectPage() {
     html += `</div>`;
     html += `
             <div class="form-group">
-                <label for="post-link">Link bài viết</label>
+                <label for="post-link">Link hoặc ID bài viết</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
@@ -140,7 +140,12 @@ function getComment(){
     var accessToken = pageInfo.access_token;
 
     let link = $("#post-link").val();
-    let postId = link.substr(link.lastIndexOf("/") + 1);
+    var lastPos = link.lastIndexOf("/");
+    let postId = "";
+    if (lastPos >= 0)
+        postId = link.substr(lastPos + 1);
+    else postId = getNumberInMessage(link);
+
     if (!postId){
         onError(null, "Thiếu link bài viết");
         return;
