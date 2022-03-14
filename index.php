@@ -26,36 +26,11 @@
          data-size="large"
          data-button-type="login_with"
          data-layout="default"
-         data-auto-logout-link="true"
          data-use-continue-as="true"
          data-onlogin="checkLoginState()"
          data-scope="pages_show_list, pages_read_engagement, pages_read_user_content"
     ></div>
 
-    <div id="section-get-comment">
-        <form id="form-select-page">
-            <div class="form-group">
-                <label>Chọn trang</label> 
-                <div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-                    <label class="form-check-label" for="exampleRadios1">
-                        Default radio
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                    <label class="form-check-label" for="exampleRadios2">
-                        Second default radio
-                    </label>
-                </div>
-                <div class="form-check disabled">
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled>
-                    <label class="form-check-label" for="exampleRadios3">
-                        Disabled radio
-                    </label>
-                </div>
-            </div> 
-        </form>
-    </div>
+    <div id="section-get-comment"></div>
 </body>
 </html>

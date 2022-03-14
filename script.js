@@ -33,9 +33,6 @@ function statusChangeCallback(response) {  // Called with the results from FB.ge
     console.log(response);                   // The current login status of the person.
     if (response.status === 'connected') {   // Logged into your webpage and Facebook.
         testAPI();
-    } else {                                 // Not logged into your webpage or we are unable to tell.
-        document.getElementById('status').innerHTML = 'Please log ' +
-            'into this webpage.';
     }
 }
 
@@ -72,8 +69,24 @@ function testAPI() {                      // Testing Graph API after login.  See
 }
 
 function createFormSelectPage(){
-    let formSelectPage = $("#form-select-page");
+    let divSectionGetComment = $("#section-get-comment");
     if (PageData.length == 0){
-            
+        divSectionGetComment.html(`<p>Bạn không quản lý Page nào.</p>`)
+    } else {
+        let html = `<form id="form-select-page"><div class="form-group"><label>Chọn trang</label>`;
+        PageData.forEach((pageInfo, index) => {
+            let checked = index == 0? "checked" : "";
+            let namePage = pageInfo.name;
+            let id = pageInfo.id;
+            html += `
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="pageOptionRadios" id="option${index}" value="${id}" ${checked}>
+                    <label class="form-check-label" for="pageOptionRadios">
+                        ${namePage}
+                    </label>
+            `;
+        })
+        html += `</div></form>`;
+        divSectionGetComment.html(html);
     }
 }
