@@ -194,6 +194,7 @@ function onFetchComment(response){
 
 function onFetchFinish(){
     //parse list comment
+    setWaitingEnabled(false);
     let html = "";
     html += `<thead>
             <th>STT</th>
@@ -222,7 +223,6 @@ function onFetchFinish(){
         dom: 'lBfrtip',
         buttons: ['copy', 'excel']
     });
-    setWaitingEnabled(false);
 }
 
 function getNumberInMessage(message){
@@ -261,5 +261,5 @@ function setWaitingEnabled(enabled){
             body.addClass(classname);
     }
     else body.removeClass(classname);
-    $("button[name=submit]").prop("disabled", !enabled);
+    $("button[name=submit]").prop("disabled", enabled);
 }

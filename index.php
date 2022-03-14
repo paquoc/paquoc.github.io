@@ -15,6 +15,18 @@
         .waiting * {
             cursor: progress;
         }
+
+        .link-cell {
+            max-width: 150px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+        }
     </style>
 </head>
 <body>
