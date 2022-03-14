@@ -15,7 +15,7 @@
  *
  * @typedef {{
  *      data: PageInfoObject[],
- *      paging: {cursors: {after: string, before: string}}
+ *      paging: {cursors: {after: string, before: string}, next: string}
  * }} AccountInfo
  */
 
