@@ -64,31 +64,16 @@ window.fbAsyncInit = function () {
 function testAPI() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me/accounts', function (response) {
-        console.log('Accounts: ', response);
         if (response.data.length > 0){
-
+            PageData = response.data;
+            createFormSelectPage();
         }
-        document.getElementById('status').innerHTML =
-            'Thanks for logging in!';
     });
 }
 
-function getComment(){
-    // var url = document.getElementById("input-url").value;
-    // if (!url)
-    //     return;
-    // var pageId = Object.keys(PageAccessToken)[0];
-    // var accessToken = PageAccessToken[pageId];
-    // var postId = url.substr(s.lastIndexOf("/") + 1);
-    // FB.api(
-    //     '/1798713497075922_2301386663475267/comments',
-    //     'GET',
-    //     {},
-    //     function(response) {
-    //         console.log(response);
-    //     }
-    //   );
-    FB.api('/me', function (response) {
-        console.log('Me: ', response);
-    });
+function createFormSelectPage(){
+    let formSelectPage = $("#form-select-page");
+    if (PageData.length == 0){
+            
+    }
 }
