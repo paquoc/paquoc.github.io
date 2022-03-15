@@ -44,10 +44,10 @@ var SessionData = {
  */
 var PageData = [];
 
-
-// $(function (){
-//     createFormSelectPage()
-// })
+$(document).ready(function (){
+    initDataTable();
+    // createFormSelectPage()
+})
 
 function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
     console.log(response);                   // The current login status of the person.
@@ -56,10 +56,6 @@ function statusChangeCallback(response) {  // Called with the results from FB.ge
         $(".fb-login-button").hide();
         $("#btn-logout").show();
     }
-}
-
-function hideBtnLogin(){
-    $(".fb-login-button").hide();
 }
 
 function checkLoginState() {               // Called when a person is finished with the Login Button.
@@ -95,7 +91,7 @@ function getPageList() {                      // Testing Graph API after login. 
 }
 
 function createFormSelectPage() {
-    let html = `<form id="form-select-page"><div class="form-group"><label>Chọn trang</label>`;
+    let html = "<label>Chọn trang:</label>";
     PageData.forEach((pageInfo, index) => {
         let checked = index == 0 ? "checked" : "";
         let namePage = pageInfo.name;
@@ -109,25 +105,8 @@ function createFormSelectPage() {
                 </div>
             `;
     })
-    html += `</div>`;
-    html += `
-            <div class="form-group">
-                <label for="post-link">Link hoặc ID bài viết</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <i class="fa fa-link"></i>
-                        </div>
-                    </div>
-                    <input id="post-link" name="post-link" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="form-group">
-                <button name="submit" type="button" class="btn btn-primary" onclick="getComment()">Submit</button>
-            </div>
-        </form>`
-    html += `<table id="table-comment" class="table"></table>`
-    $("#section-get-comment").html(html);
+    $("#radio-input-page").html(html);
+    $("#section-get-comment").show();
 }
 
 function getComment(){
@@ -157,8 +136,7 @@ function getComment(){
 }
 
 function getPostId(link){
-    let postId = "";
-    var pos = -1;
+    let postId, pos;
     if ((pos = link.indexOf("posts/")) >= 0){
         //Case https://www.facebook.com/thuvientinhnang/posts/POST_ID
         postId = getFirstNumPhrase(link.substr(pos));
@@ -170,7 +148,7 @@ function getPostId(link){
     return postId
 }
 
-function getFirstNumPhrase(str, pos){
+function getFirstNumPhrase(str){
     var arrNum = str.match(/\d+/g);
     if (arrNum && arrNum.length > 0)
         return arrNum[0];
@@ -213,36 +191,11 @@ function onFetchComment(response){
 }
 
 function onFetchFinish(){
-    //parse list comment
+    var table = $('#table-comment').DataTable();
+    table.clear();
+    table.rows.add(SessionData.commentData);
+    table.draw();
     setWaitingEnabled(false);
-    let html = "";
-    html += `<thead>
-            <th style="max-width: 20px">STT</th>
-            <th style="width: 110px">Time</th>
-            <th>User</th>
-            <th>Message</th>
-            <th>Number</th>
-            <th>Link</th>
-        </thead>`;
-    html += "<tbody>"
-    SessionData.commentData.forEach((obj, index) => {
-        var link = `https://www.facebook.com/${SessionData.pageId}/posts/${SessionData.postId}?comment_id=${obj.id.substr(obj.id.indexOf("_") + 1)}`
-        html += `<tr>
-                <td>${index}</td>
-                <td>${formatTime(obj.created_time)}</td>
-                <td>${obj.from? obj.from.name : ""}</td>
-                <td>${obj.message}</td>
-                <td>${getNumberInMessage(obj.message)}</td>
-                <td class="link-cell"><a href="${link}" target="_blank">${link}k</a></td>
-            </tr>`
-    })
-    html += "</tbody>"
-    $("#table-comment").html(html);
-    $('#table-comment').DataTable({
-        retrieve: true,
-        dom: 'lBfrtip',
-        buttons: ['copy', 'excel']
-    });
 }
 
 function getNumberInMessage(message){
@@ -274,13 +227,10 @@ function onError(e, alertMessage = ""){
 }
 
 function setWaitingEnabled(enabled){
-    let body = $("body");
-    let classname = "waiting";
-    if (enabled){
-        if (!body.hasClass(classname))
-            body.addClass(classname);
-    }
-    else body.removeClass(classname);
+    let spinner = $(".spinner-border");
+    if (enabled)
+        spinner.show();
+    else spinner.hide();
     $("button[name=submit]").prop("disabled", enabled);
 }
 
@@ -288,5 +238,49 @@ function logout(){
     FB.logout();
     $(".fb-login-button").show();
     $("#btn-logout").hide();
-    $("#section-get-comment").html("");
+    $("#section-get-comment").hide();
+}
+
+function initDataTable() {
+    $('#table-comment').DataTable({
+        dom: 'lBfrtip',
+        buttons: ['copy', 'excel'],
+        columnDefs: [
+            {
+                targets: 0,
+                data: null,
+                render: ( data, type, row, meta ) => meta.row
+            },
+            {
+                targets: 1,
+                data: "created_time",
+                render: data => formatTime(data)
+            },
+            {
+                targets: 2,
+                data: "from",
+                render: data => data? data.name : ""
+            },
+            {
+                targets: 3,
+                data: "message",
+                render: data => data
+            },
+            {
+                targets: 4,
+                data: "message",
+                render: data => getNumberInMessage(data)
+            },
+            {
+                targets: 5,
+                data: "id",
+                className: "link-cell",
+                render: data => {
+                    var link = `https://www.facebook.com/${SessionData.pageId}/posts/${SessionData.postId}?comment_id=${data.substr(data.indexOf("_") + 1)}`
+                    return `<a href="${link}" target="_blank">${link}</a>`;
+                }
+            }
+        ]
+    });
+
 }
