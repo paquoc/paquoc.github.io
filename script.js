@@ -140,11 +140,7 @@ function getComment(){
     var accessToken = pageInfo.access_token;
 
     let link = $("#post-link").val();
-    var lastPos = link.lastIndexOf("/");
-    let postId = "";
-    if (lastPos >= 0)
-        postId = link.substr(lastPos + 1);
-    else postId = getNumberInMessage(link);
+    var postId = getPostId(link);
 
     if (!postId){
         onError(null, "Thiếu link bài viết");
@@ -158,6 +154,27 @@ function getComment(){
         commentData: []
     };
     goFetchComment();
+}
+
+function getPostId(link){
+    let postId = "";
+    var pos = -1;
+    if ((pos = link.indexOf("posts/")) >= 0){
+        //Case https://www.facebook.com/thuvientinhnang/posts/POST_ID
+        postId = getFirstNumPhrase(link.substr(pos));
+    } else if ((pos = link.indexOf("fbid=")) >= 0){
+        //Case https://www.facebook.com/permalink.php?story_fbid=POST_ID&id=PAGE_ID
+        postId = getFirstNumPhrase(link.substr(pos));
+    } else postId = getFirstNumPhrase(link);
+
+    return postId
+}
+
+function getFirstNumPhrase(str, pos){
+    var arrNum = str.match(/\d+/g);
+    if (arrNum && arrNum.length > 0)
+        return arrNum[0];
+    return null;
 }
 
 
