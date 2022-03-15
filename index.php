@@ -68,7 +68,7 @@
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>
-            <div id="div-table-comment">
+            <div id="div-table-comment" style="display: none">
                 <table id="table-comment" class="table">
                     <thead>
                         <tr>

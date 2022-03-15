@@ -110,6 +110,7 @@ function createFormSelectPage() {
 }
 
 function getComment(){
+    $("#div-table-comment").hide();
     setWaitingEnabled(true);
     var pageId = $("#form-select-page input[type='radio']:checked").val();
     var pageInfo = PageData.find(page => page.id == pageId);
@@ -195,6 +196,7 @@ function onFetchFinish(){
     table.clear();
     table.rows.add(SessionData.commentData);
     table.draw();
+    $("#div-table-comment").show();
     setWaitingEnabled(false);
 }
 
