@@ -256,21 +256,16 @@ function initDataTable() {
             },
             {
                 targets: 1,
-                data: "from",
-                render: data => data? data.name : ""
-            },
-            {
-                targets: 2,
                 data: "message",
                 render: data => data
             },
             {
-                targets: 3,
+                targets: 2,
                 data: "message",
                 render: data => getNumberInMessage(data)
             },
             {
-                targets: 4,
+                targets: 3,
                 data: "id",
                 className: "link-cell",
                 render: data => {
