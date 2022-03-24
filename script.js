@@ -166,7 +166,7 @@ function goFetchComment(afterNode = ""){
     let {pageId, postId, accessToken} = SessionData;
     $.ajax({
         method: "GET",
-        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=3000${afterParam}`,
+        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=1000${afterParam}`,
         success: onFetchComment,
         error: (e)=>{onError(e, "Không lấy được comment");}
     })
