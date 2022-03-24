@@ -73,7 +73,6 @@
                     <thead>
                         <tr>
                             <th style="max-width: 20px">STT</th>
-                            <th style="width: 110px">Time</th>
                             <th>User</th>
                             <th>Message</th>
                             <th>Number</th>

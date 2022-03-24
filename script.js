@@ -166,7 +166,7 @@ function goFetchComment(afterNode = ""){
     let {pageId, postId, accessToken} = SessionData;
     $.ajax({
         method: "GET",
-        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=1000&fields=message,id${afterParam}`,
+        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=3000&fields=message,id${afterParam}`,
         success: onFetchComment,
         error: (e)=>{onError(e, "Không lấy được comment");}
     })
@@ -256,26 +256,21 @@ function initDataTable() {
             },
             {
                 targets: 1,
-                data: "created_time",
-                render: data => formatTime(data)
-            },
-            {
-                targets: 2,
                 data: "from",
                 render: data => data? data.name : ""
             },
             {
-                targets: 3,
+                targets: 2,
                 data: "message",
                 render: data => data
             },
             {
-                targets: 4,
+                targets: 3,
                 data: "message",
                 render: data => getNumberInMessage(data)
             },
             {
-                targets: 5,
+                targets: 4,
                 data: "id",
                 className: "link-cell",
                 render: data => {
