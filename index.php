@@ -62,6 +62,7 @@
                     <div class="form-group">
                         <button name="submit" type="button" class="btn btn-primary" onclick="getComment()">Submit</button>
                     </div>
+                </form>
             </div>
             <div class="d-flex justify-content-center text-primary">
                 <div class="spinner-border" role="status"  style="display: none;">
