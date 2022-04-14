@@ -160,7 +160,7 @@ function getFirstNumPhrase(str){
 function goFetchComment(url){
     if (!url){
         let {pageId, postId, accessToken} = SessionData;
-        url = `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=3000&fields=message,id${afterParam}`;
+        url = `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=3000&fields=message,id`;
     }
 
     $.ajax({
