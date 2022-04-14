@@ -157,16 +157,15 @@ function getFirstNumPhrase(str){
 }
 
 
-function goFetchComment(afterNode = ""){
-    var afterParam = "";
-    if (afterNode){
-        afterParam = `&after=${afterNode}`
+function goFetchComment(url){
+    if (!url){
+        let {pageId, postId, accessToken} = SessionData;
+        url = `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=3000&fields=message,id${afterParam}`;
     }
 
-    let {pageId, postId, accessToken} = SessionData;
     $.ajax({
         method: "GET",
-        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=3000&fields=message,id${afterParam}`,
+        url: url,
         success: onFetchComment,
         error: (e)=>{onError(e, "Không lấy được comment");}
     })
@@ -184,8 +183,7 @@ function onFetchComment(response){
 
     SessionData.commentData.push(...response.data);
     if (response.paging && response.paging.next){
-        let afterNode = response.paging.cursors.after;
-        goFetchComment(afterNode);
+        goFetchComment(response.paging.next);
     } else {
         onFetchFinish();
     }
