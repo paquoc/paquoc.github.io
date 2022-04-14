@@ -32,7 +32,7 @@
             <button class="btn btn-primary" onclick="logout()">Log Out</button>
         </div>
         <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=1258434921313330&autoLogAppEvents=1" nonce="w6xnQUdo"></script>
-        <script src="./getComment.js?v=6"></script>
+        <script src="./getComment.js?v=7"></script>
 
         <div class="fb-login-button"
              data-width=""
@@ -46,11 +46,23 @@
 
         <div id="section-get-comment" style="display: none;">
             <div>
-                <form id="form-select-page">
-                    <div class="form-group" id="radio-input-page"></div>
-                    <div class="form-group">
-                        <label for="post-link">Link hoặc ID bài viết:</label>
-                        <div class="input-group">
+                <form id="form-select-page" class="mt-3">
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-form-label col-sm-2 pt-0">Chọn trang: </legend>
+                            <div class="col-sm-8" id="radio-input-page">
+                                <!-- <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="pageOptionRadios" id="option0" value="pageId"
+                                        checked>
+                                    <label class="form-check-label" for="pageOptionRadios">Page Name</label>
+                                </div> -->
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="form-group row">
+                        <label for="post-link" class="col-sm-2 col-form-label">Link bài viết</label>
+                        <div class="input-group col-sm-8">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     <i class="fa fa-link"></i>
@@ -58,14 +70,19 @@
                             </div>
                             <input id="post-link" name="post-link" type="text" class="form-control">
                         </div>
-                        <input id="limit" name="limit" type="text" class="form-control d-none" value="4000">
+                    </div>
+                    <div class="form-group row">
+                        <label for="limit" class="col-sm-2 col-form-label">Giới hạn</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control" id="limit" value="4000">
+                        </div>
                     </div>
                     <div class="form-group">
                         <button name="submit" type="button" class="btn btn-primary" onclick="getComment()">Submit</button>
                     </div>
                 </form>
             </div>
-            <div id="div-loading">
+            <div id="div-loading" style="display: none;">
                 <div class="d-flex align-items-center text-primary flex-column">
                     <div class="spinner-border" role="status">
                         <span class="sr-only">Loading...</span>
