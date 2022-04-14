@@ -92,7 +92,7 @@ function getPageList() {                      // Testing Graph API after login. 
 }
 
 function createFormSelectPage() {
-    let html = "<label>Chọn trang:</label>";
+    let html = "";
     PageData.forEach((pageInfo, index) => {
         let checked = index == 0 ? "checked" : "";
         let namePage = pageInfo.name;
