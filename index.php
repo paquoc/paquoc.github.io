@@ -27,7 +27,7 @@
 </head>
 <body>
     <div class="container mt-3">
-        <h2>Get Post Comment TOOL</h2>
+        <h2>Get Post Comment TOOL (DEV)</h2>
         <div class="mb-2" id="btn-logout" style="display: none">
             <button class="btn btn-primary" onclick="logout()">Log Out</button>
         </div>
@@ -46,7 +46,7 @@
 
         <div id="section-get-comment" style="display: none;">
             <div>
-            <form id="form-select-page" class="mt-3">
+                <form id="form-select-page" class="mt-3">
                     <fieldset class="form-group">
                         <div class="row">
                             <legend class="col-form-label col-sm-2 pt-0">Chọn trang: </legend>
