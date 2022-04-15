@@ -37,6 +37,7 @@ var SessionData = {
      * @type {CommentObject[]}
      */
     commentData: null,
+    currentXhr: null,
 }
 
 /**
@@ -91,7 +92,7 @@ function getPageList() {                      // Testing Graph API after login. 
 }
 
 function createFormSelectPage() {
-    let html = "<label>Chọn trang:</label>";
+    let html = "";
     PageData.forEach((pageInfo, index) => {
         let checked = index == 0 ? "checked" : "";
         let namePage = pageInfo.name;
@@ -164,18 +165,31 @@ function goFetchComment(afterNode = ""){
     }
 
     let {pageId, postId, accessToken} = SessionData;
-    $.ajax({
+    abortCurrentXhr();
+    let limit = $("#limit").val();
+    SessionData.currentXhr = $.ajax({
         method: "GET",
-        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=4000&fields=message,id${afterParam}`,
+        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=${limit}&fields=message,id${afterParam}`,
         success: onFetchComment,
         error: (e)=>{onError(e, "Không lấy được comment");}
     })
+}
+
+function abortCurrentXhr(turnOffWaitingStatus = false){
+    if (SessionData.currentXhr){
+        SessionData.currentXhr.abort();
+        SessionData.currentXhr = null;
+    }
+
+    if (turnOffWaitingStatus)
+        setWaitingEnabled(false);
 }
 
 /**
  * @param response
  */
 function onFetchComment(response){
+    SessionData.currentXhr = null;
     //Check error?
     if (response.error){
         onError(response, response.error.message);
@@ -183,6 +197,7 @@ function onFetchComment(response){
     }
 
     SessionData.commentData.push(...response.data);
+    appendTableComment(response.data);
     if (response.paging && response.paging.next && response.paging.cursors){
         let afterNode = response.paging.cursors.after;
         goFetchComment(afterNode);
@@ -192,12 +207,15 @@ function onFetchComment(response){
 }
 
 function onFetchFinish(){
+    setWaitingEnabled(false);
+}
+
+function appendTableComment(comments){
     var table = $('#table-comment').DataTable();
     table.clear();
-    table.rows.add(SessionData.commentData);
+    table.rows.add(comments);
     table.draw();
     $("#div-table-comment").show();
-    setWaitingEnabled(false);
 }
 
 function getNumberInMessage(message){
@@ -209,19 +227,8 @@ function getNumberInMessage(message){
     return "";
 }
 
-/**
- * @param {string} timeStr 2022-03-13T03:22:05+0000
- * @return {string} 2022-03-13 10:22:05
- */
-function formatTime(timeStr){
-    return " ";
-    var s = new Date(new Date(timeStr).getTime() + 3600* 7000).toISOString()
-    //s: 2022-03-13T10:22:05.000Z
-    return s.substr(0, 10) + " " + s.substr(11, 8)
-}
-
-
 function onError(e, alertMessage = ""){
+    SessionData.currentXhr = null;
     setWaitingEnabled(false);
     if (alertMessage)
         alert(alertMessage);
@@ -230,7 +237,7 @@ function onError(e, alertMessage = ""){
 }
 
 function setWaitingEnabled(enabled){
-    let spinner = $(".spinner-border");
+    let spinner = $("#div-loading");
     if (enabled)
         spinner.show();
     else spinner.hide();
