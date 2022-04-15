@@ -27,7 +27,7 @@
 </head>
 <body>
     <div class="container mt-3">
-        <h2>Get Post Comment TOOL (DEV)</h2>
+        <h2>Get Post Comment TOOL</h2>
         <div class="mb-2" id="btn-logout" style="display: none">
             <button class="btn btn-primary" onclick="logout()">Log Out</button>
         </div>
