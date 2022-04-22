@@ -233,10 +233,10 @@ function checkIsValidCommnet(message){
     var number = getNumberInMessage(message);
     if (number == "")
         return "Không có số"
-    if (markExistUserId[number]){
+    if (SessionData.markExistUserId[number]){
         return "Trùng"
     }    
-    markExistUserId[number] = true;
+    SessionData.markExistUserId[number] = true;
     return "";
 }
 
