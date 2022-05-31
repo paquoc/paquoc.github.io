@@ -64,7 +64,7 @@ var SessionData = {
  */
 var PageData = [];
 
-$(document).ready(function (){
+$(document).ready(function () {
     initDataTable();
     // createFormSelectPage()
 })
@@ -101,7 +101,7 @@ window.fbAsyncInit = function () {
 
 function getPageList() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
     FB.api('/me/accounts', function (response) {
-        if (response.data.length > 0){
+        if (response.data.length > 0) {
             PageData = response.data;
             createFormSelectPage();
         } else {
@@ -129,7 +129,7 @@ function createFormSelectPage() {
     $("#section-get-comment").show();
 }
 
-function getComment(){
+function getComment() {
     $("#div-table-comment").hide();
     setWaitingEnabled(true);
     var pageId = $("#form-select-page input[type='radio']:checked").val();
@@ -142,7 +142,7 @@ function getComment(){
     let link = $("#post-link").val();
     var postId = getPostId(link);
 
-    if (!postId){
+    if (!postId) {
         onError(null, "Thiếu link bài viết");
         return;
     }
@@ -157,12 +157,12 @@ function getComment(){
     goFetchComment();
 }
 
-function getPostId(link){
+function getPostId(link) {
     let postId, pos;
-    if ((pos = link.indexOf("posts/")) >= 0){
+    if ((pos = link.indexOf("posts/")) >= 0) {
         //Case https://www.facebook.com/thuvientinhnang/posts/POST_ID
         postId = getFirstNumPhrase(link.substr(pos));
-    } else if ((pos = link.indexOf("fbid=")) >= 0){
+    } else if ((pos = link.indexOf("fbid=")) >= 0) {
         //Case https://www.facebook.com/permalink.php?story_fbid=POST_ID&id=PAGE_ID
         postId = getFirstNumPhrase(link.substr(pos));
     } else postId = getFirstNumPhrase(link);
@@ -170,7 +170,7 @@ function getPostId(link){
     return postId
 }
 
-function getFirstNumPhrase(str){
+function getFirstNumPhrase(str) {
     var arrNum = str.match(/\d+/g);
     if (arrNum && arrNum.length > 0)
         return arrNum[0];
@@ -178,25 +178,25 @@ function getFirstNumPhrase(str){
 }
 
 
-function goFetchComment(afterNode = ""){
+function goFetchComment(afterNode = "") {
     var afterParam = "";
-    if (afterNode){
+    if (afterNode) {
         afterParam = `&after=${afterNode}`
     }
 
-    let {pageId, postId, accessToken} = SessionData;
+    let { pageId, postId, accessToken } = SessionData;
     abortCurrentXhr();
     let limit = $("#limit").val();
     SessionData.currentXhr = $.ajax({
         method: "GET",
         url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?&access_token=${accessToken}&limit=${limit}&fields=attachment,created_time,message,id${afterParam}`,
         success: onFetchComment,
-        error: (e)=>{onError(e, "Không lấy được comment");}
+        error: (e) => { onError(e, "Không lấy được comment"); }
     })
 }
 
-function abortCurrentXhr(turnOffWaitingStatus = false){
-    if (SessionData.currentXhr){
+function abortCurrentXhr(turnOffWaitingStatus = false) {
+    if (SessionData.currentXhr) {
         SessionData.currentXhr.abort();
         SessionData.currentXhr = null;
     }
@@ -208,17 +208,17 @@ function abortCurrentXhr(turnOffWaitingStatus = false){
 /**
  * @param response
  */
-function onFetchComment(response){
+function onFetchComment(response) {
     SessionData.currentXhr = null;
     //Check error?
-    if (response.error){
+    if (response.error) {
         onError(response, response.error.message);
         return;
     }
 
     SessionData.commentData.push(...response.data);
     appendTableComment(response.data);
-    if (response.paging && response.paging.next && response.paging.cursors){
+    if (response.paging && response.paging.next && response.paging.cursors) {
         let afterNode = response.paging.cursors.after;
         goFetchComment(afterNode);
     } else {
@@ -226,11 +226,11 @@ function onFetchComment(response){
     }
 }
 
-function onFetchFinish(){
+function onFetchFinish() {
     setWaitingEnabled(false);
 }
 
-function appendTableComment(comments){
+function appendTableComment(comments) {
     var table = $('#table-comment').DataTable();
     table.clear();
     table.rows.add(comments);
@@ -238,7 +238,7 @@ function appendTableComment(comments){
     $("#div-table-comment").show();
 }
 
-function getNumberInMessage(message){
+function getNumberInMessage(message) {
     if (!message)
         return "";
     var arr = message.match(/\d/g);
@@ -247,18 +247,18 @@ function getNumberInMessage(message){
     return "";
 }
 
-function checkIsValidCommnet(message){
+function checkIsValidCommnet(message) {
     var number = getNumberInMessage(message);
     if (number == "")
         return "Không có số"
-    if (SessionData.markExistUserId[number]){
+    if (SessionData.markExistUserId[number]) {
         return "Trùng"
-    }    
+    }
     SessionData.markExistUserId[number] = true;
     return "";
 }
 
-function onError(e, alertMessage = ""){
+function onError(e, alertMessage = "") {
     SessionData.currentXhr = null;
     setWaitingEnabled(false);
     if (alertMessage)
@@ -267,7 +267,7 @@ function onError(e, alertMessage = ""){
         console.log(e);
 }
 
-function setWaitingEnabled(enabled){
+function setWaitingEnabled(enabled) {
     let spinner = $("#div-loading");
     if (enabled)
         spinner.show();
@@ -275,7 +275,7 @@ function setWaitingEnabled(enabled){
     $("button[name=submit]").prop("disabled", enabled);
 }
 
-function logout(){
+function logout() {
     FB.logout();
     $(".fb-login-button").show();
     $("#btn-logout").hide();
@@ -286,12 +286,19 @@ function initDataTable() {
     var i = 0;
     $('#table-comment').DataTable({
         dom: 'lBfrtip',
-        buttons: ['excel'],
+        buttons: [
+            {
+                extend: 'excel',
+                action: function (e, dt, button, config) {
+                    SessionData.markExistUserId = {};
+                }
+            }
+        ],
         columnDefs: [
             {
                 targets: i++,
                 data: null,
-                render: ( data, type, row, meta ) => meta.row
+                render: (data, type, row, meta) => meta.row
             },
             {
                 targets: i++,
@@ -301,7 +308,7 @@ function initDataTable() {
             {
                 targets: i++,
                 data: "attachment",
-                render:  (/** @type {AttachmentObj} */ data) => {
+                render: (/** @type {AttachmentObj} */ data) => {
                     if (!data) return "";
                     if (data && data.media && data.media.image && data.media.image.src)
                         return `<span style="display:none">x</span><img src="${data.media.image.src}" width="100" height="auto"/>`
