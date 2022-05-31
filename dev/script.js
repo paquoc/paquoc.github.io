@@ -56,6 +56,7 @@ var SessionData = {
      */
     commentData: null,
     currentXhr: null,
+    markExistUserId: null,
 }
 
 /**
@@ -150,7 +151,8 @@ function getComment(){
         accessToken: accessToken,
         pageId: pageId,
         postId: postId,
-        commentData: []
+        commentData: [],
+        markExistUserId: {}
     };
     goFetchComment();
 }
@@ -245,6 +247,17 @@ function getNumberInMessage(message){
     return "";
 }
 
+function checkIsValidCommnet(message){
+    var number = getNumberInMessage(message);
+    if (number == "")
+        return "Không có số"
+    if (SessionData.markExistUserId[number]){
+        return "Trùng"
+    }    
+    SessionData.markExistUserId[number] = true;
+    return "";
+}
+
 function onError(e, alertMessage = ""){
     SessionData.currentXhr = null;
     setWaitingEnabled(false);
@@ -298,6 +311,11 @@ function initDataTable() {
                 targets: i++,
                 data: "message",
                 render: data => getNumberInMessage(data)
+            },
+            {
+                targets: i++,
+                data: "message",
+                render: data => checkIsValidCommnet(data)
             },
             {
                 targets: i++,

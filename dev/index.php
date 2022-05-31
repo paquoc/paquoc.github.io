@@ -101,6 +101,7 @@
                             <th>Message</th>
                             <th>Image</th>
                             <th>Number</th>
+                            <th>Hợp lệ</th>
                             <th>Link</th>
                         </tr>
                     </thead>
