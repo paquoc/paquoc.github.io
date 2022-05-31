@@ -291,6 +291,7 @@ function initDataTable() {
                 extend: 'excel',
                 action: function (e, dt, button, config) {
                     SessionData.markExistUserId = {};
+                    $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
                 }
             }
         ],
