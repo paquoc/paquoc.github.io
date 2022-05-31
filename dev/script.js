@@ -189,7 +189,7 @@ function goFetchComment(afterNode = ""){
     let limit = $("#limit").val();
     SessionData.currentXhr = $.ajax({
         method: "GET",
-        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments??fields=comments{attachment,created_time,message}&access_token=${accessToken}&limit=${limit}&fields=message,id${afterParam}`,
+        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?&access_token=${accessToken}&limit=${limit}&fields=attachment,created_time,message,id${afterParam}`,
         success: onFetchComment,
         error: (e)=>{onError(e, "Không lấy được comment");}
     })
