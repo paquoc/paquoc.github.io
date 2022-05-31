@@ -19,13 +19,31 @@
  * }} AccountInfo
  */
 
+/**
+ * @typedef {{
+ *      media: {
+ *          image: {
+ *              height: number,
+ *              width: number, 
+ *              src: string
+ *          }
+ *      }, 
+ *      target: {
+ *          id: string, 
+ *          url: string
+ *      }, 
+ *      type: string, 
+ *      url: string
+ * }} AttachmentObj
+ * //Docs: https://developers.facebook.com/docs/graph-api/reference/story-attachment/
+ */
 
 /**
  * @typedef {{
  *      created_time: string,
- *      from: {name: string, id: string},
  *      message: string,
- *      id: string
+ *      id: string,
+ *      attachment: AttachmentObj
  * }} CommentObject
  */
 
@@ -169,7 +187,7 @@ function goFetchComment(afterNode = ""){
     let limit = $("#limit").val();
     SessionData.currentXhr = $.ajax({
         method: "GET",
-        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=${limit}&fields=message,id${afterParam}`,
+        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments??fields=comments{attachment,created_time,message}&access_token=${accessToken}&limit=${limit}&fields=message,id${afterParam}`,
         success: onFetchComment,
         error: (e)=>{onError(e, "Không lấy được comment");}
     })
@@ -252,27 +270,37 @@ function logout(){
 }
 
 function initDataTable() {
+    var i = 0;
     $('#table-comment').DataTable({
         dom: 'lBfrtip',
         buttons: ['copy', 'excel'],
         columnDefs: [
             {
-                targets: 0,
+                targets: i++,
                 data: null,
                 render: ( data, type, row, meta ) => meta.row
             },
             {
-                targets: 1,
+                targets: i++,
                 data: "message",
                 render: data => data
             },
             {
-                targets: 2,
+                targets: i++,
+                data: "attachment",
+                render:  (/** @type {AttachmentObj} */ data) => {
+                    if (!data) return "";
+                    if (data && data.media && data.media.image && data.media.image.src)
+                        return `<img src="${data.media.image.src}" width="100" height="auto"/>`
+                }
+            },
+            {
+                targets: i++,
                 data: "message",
                 render: data => getNumberInMessage(data)
             },
             {
-                targets: 3,
+                targets: i++,
                 data: "id",
                 className: "link-cell",
                 render: data => {

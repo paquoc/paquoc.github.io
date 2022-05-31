@@ -32,7 +32,7 @@
             <button class="btn btn-primary" onclick="logout()">Log Out</button>
         </div>
         <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=1258434921313330&autoLogAppEvents=1" nonce="w6xnQUdo"></script>
-        <script src="./script.js?v=7"></script>
+        <script src="./script.js?v=8"></script>
 
         <div class="fb-login-button"
              data-width=""
@@ -97,8 +97,9 @@
                 <table id="table-comment" class="table">
                     <thead>
                         <tr>
-                            <th style="max-width: 20px">STT</th>
+                            <th style="max-width: 15px">STT</th>
                             <th>Message</th>
+                            <th>Image</th>
                             <th>Number</th>
                             <th>Link</th>
                         </tr>
