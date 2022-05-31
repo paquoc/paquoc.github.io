@@ -286,7 +286,7 @@ function initDataTable() {
     var i = 0;
     $('#table-comment').DataTable({
         dom: 'lBfrtip',
-        buttons: ['copy', 'excel'],
+        buttons: ['excel'],
         columnDefs: [
             {
                 targets: i++,
@@ -304,7 +304,7 @@ function initDataTable() {
                 render:  (/** @type {AttachmentObj} */ data) => {
                     if (!data) return "";
                     if (data && data.media && data.media.image && data.media.image.src)
-                        return `<img src="${data.media.image.src}" width="100" height="auto"/>`
+                        return `<span style="display:none">x</span><img src="${data.media.image.src}" width="100" height="auto"/>`
                 }
             },
             {
