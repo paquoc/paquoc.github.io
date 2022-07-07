@@ -32,7 +32,7 @@
             <button class="btn btn-primary" onclick="logout()">Log Out</button>
         </div>
         <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=1258434921313330&autoLogAppEvents=1" nonce="w6xnQUdo"></script>
-        <script src="./script.js?v=13"></script>
+        <script src="./script.js?v=14"></script>
 
         <div class="fb-login-button"
              data-width=""
@@ -85,6 +85,12 @@
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="check-value" value="">
                             <small class="form-text text-muted"> Nhập giá trị muốn kiểm tra trong bình luận</small>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="whole-word-check">
+                            <label class="form-check-label" for="whole-word-check">
+                                Tìm nguyên từ
+                            </label>
                         </div>
                     </div>
                     <div class="form-group">
