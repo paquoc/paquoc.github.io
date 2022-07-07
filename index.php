@@ -32,7 +32,7 @@
             <button class="btn btn-primary" onclick="logout()">Log Out</button>
         </div>
         <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=1258434921313330&autoLogAppEvents=1" nonce="w6xnQUdo"></script>
-        <script src="./script.js?v=8"></script>
+        <script src="./script.js?v=13"></script>
 
         <div class="fb-login-button"
              data-width=""
@@ -80,6 +80,13 @@
                             </small>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="check-value" class="col-sm-2 col-form-label">Giá trị lọc</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="check-value" value="">
+                            <small class="form-text text-muted"> Nhập giá trị muốn kiểm tra trong bình luận</small>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <button name="submit" type="button" class="btn btn-primary" onclick="getComment()">Submit</button>
                     </div>
@@ -97,9 +104,10 @@
                 <table id="table-comment" class="table">
                     <thead>
                         <tr>
-                            <th style="max-width: 20px">STT</th>
+                            <th style="max-width: 15px">STT</th>
                             <th>Message</th>
-                            <th>Number</th>
+                            <th>UserID</th>
+                            <th>Chứa giá trị lọc?</th>
                             <th>Link</th>
                         </tr>
                     </thead>

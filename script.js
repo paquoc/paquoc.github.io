@@ -233,6 +233,17 @@ function getNumberInMessage(message){
     return "";
 }
 
+function checkFilterValue(message){
+    var filterValue = $("#check-value").val();
+    if (!filterValue)
+        return "";
+
+    var arr = message.split(/\s+/);
+    if (arr.indexOf(filterValue) >= 0)
+        return "x";
+    return "";
+}
+
 function onError(e, alertMessage = ""){
     SessionData.currentXhr = null;
     setWaitingEnabled(false);
@@ -258,27 +269,33 @@ function logout(){
 }
 
 function initDataTable() {
+    var id = 0;
     $('#table-comment').DataTable({
         dom: 'lBfrtip',
         buttons: ['copy', 'excel'],
         columnDefs: [
             {
-                targets: 0,
+                targets: id++,
                 data: null,
                 render: ( data, type, row, meta ) => meta.row
             },
             {
-                targets: 1,
+                targets: id++,
                 data: "message",
                 render: data => data
             },
             {
-                targets: 2,
+                targets: id++,
                 data: "message",
                 render: data => getNumberInMessage(data)
             },
             {
-                targets: 3,
+                targets: id++,
+                data: "message",
+                render: data => checkFilterValue(data)
+            },
+            {
+                targets: id++,
                 data: "id",
                 className: "link-cell",
                 render: data => {
