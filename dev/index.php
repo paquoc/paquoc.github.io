@@ -99,9 +99,7 @@
                         <tr>
                             <th style="max-width: 15px">STT</th>
                             <th>Message</th>
-                            <th>Image</th>
                             <th>UserID</th>
-                            <th>Hợp lệ</th>
                             <th>Link</th>
                         </tr>
                     </thead>
