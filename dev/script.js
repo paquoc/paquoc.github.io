@@ -236,9 +236,13 @@ function getNumberInMessage(message){
 function checkFilterValue(message){
     var filterValue = $("#check-value").val();
     if (!filterValue)
-        return "";
+        return "-";
+        
+    var isWholeWord = $("#whole-word-check").prop("checked");
+    var arr = message;
+    if (isWholeWord)
+        arr = message.split(/\s+/);
 
-    var arr = message.split(/\s+/);
     if (arr.indexOf(filterValue) >= 0)
         return "x";
     return "";
