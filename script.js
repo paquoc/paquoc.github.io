@@ -221,9 +221,15 @@ function appendTableComment(comments){
 function getNumberInMessage(message){
     if (!message)
         return "";
-    var arr = message.match(/\d/g);
-    if (arr)
-        return arr.join("");
+    var arr = message.match(/[-]{0,1}[\d]*[.]{0,1}[\d]+/g);
+    if (arr){
+        for(var i = 0; i < arr.length; i++){
+            var num = arr[i];
+            if (num.length >= 6 && num.length <= 9){
+                return num;
+            }
+        }
+    }
     return "";
 }
 
