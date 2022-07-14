@@ -128,7 +128,7 @@ function getComment(){
     getPostId(link);
 }
 
-function getPostId(link){
+function getPostId(pageId, link){
     let postId, pos;
     let shouldRequestPostId = false;
     let pfbid = "";
@@ -154,6 +154,8 @@ function getPostId(link){
 
 function requestGetPostId(pfbid){
     let accessToken = SessionData.accessToken;
+    let pageId = $("#form-select-page input[type='radio']:checked").val();
+    
     abortCurrentXhr();
     SessionData.currentXhr = $.ajax({
         method: "GET",
