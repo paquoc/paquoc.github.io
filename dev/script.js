@@ -121,33 +121,47 @@ function getComment(){
     var accessToken = pageInfo.access_token;
 
     let link = $("#post-link").val();
-    var postId = getPostId(link);
 
-    if (!postId){
-        onError(null, "Thiếu link bài viết");
-        return;
-    }
-
-    SessionData = {
-        accessToken: accessToken,
-        pageId: pageId,
-        postId: postId,
-        commentData: []
-    };
-    goFetchComment();
+    SessionData = { commentData: []};
+    SessionData.accessToken = accessToken;
+    SessionData.pageId = pageId;
+    getPostId(link);
 }
 
 function getPostId(link){
     let postId, pos;
+    let shouldRequestPostId = false;
+    let pfbid = "";
     if ((pos = link.indexOf("posts/")) >= 0){
         //Case https://www.facebook.com/thuvientinhnang/posts/POST_ID
         postId = getFirstNumPhrase(link.substr(pos));
     } else if ((pos = link.indexOf("fbid=")) >= 0){
         //Case https://www.facebook.com/permalink.php?story_fbid=POST_ID&id=PAGE_ID
         postId = getFirstNumPhrase(link.substr(pos));
-    } else postId = getFirstNumPhrase(link);
+    } else if ((pos = link.indexOf("posts/pfbid")) >= 0){
+        //Case https://www.facebook.com/Icazingplay/posts/pfbid0nWb5...
+        shouldRequestPostId = true;
+        pfbid = link.substr(pos + "posts/".length);
+    }
+    else postId = getFirstNumPhrase(link);
 
-    return postId
+    if (shouldRequestPostId){
+        requestGetPostId(pfbid);
+    } else {
+        SessionData.postId = postId;
+        goFetchComment();
+    }
+}
+
+function requestGetPostId(pfbid){
+    let accessToken = SessionData.accessToken;
+    abortCurrentXhr();
+    SessionData.currentXhr = $.ajax({
+        method: "GET",
+        url: `https://graph.facebook.com/v13.0/${pageId}_${pfbid}?access_token=${accessToken}`,
+        success: onGetPostIdSuccess,
+        error: (e)=>{onError(e, "Không lấy được postId");}
+    })
 }
 
 function getFirstNumPhrase(str){
@@ -184,6 +198,25 @@ function abortCurrentXhr(turnOffWaitingStatus = false){
     if (turnOffWaitingStatus)
         setWaitingEnabled(false);
 }
+
+/**
+ * @param response
+ */
+ function onGetPostIdSuccess(response){
+    SessionData.currentXhr = null;
+    if (response.error){
+        onError(response, response.error.message);
+        return;
+    }
+
+    let dashPos = response.id.indexOf("_");
+    if (dashPos < 0){
+        onError(e, "Không lấy được postId");
+        return;
+    }
+    SessionData.postId = response.id.substr(dashPos + 1);
+    goFetchComment();
+ }
 
 /**
  * @param response
