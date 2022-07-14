@@ -132,18 +132,17 @@ function getPostId(link){
     let postId, pos;
     let shouldRequestPostId = false;
     let pfbid = "";
-    if ((pos = link.indexOf("posts/")) >= 0){
+    if ((pos = link.indexOf("posts/pfbid")) >= 0){
+        //Case https://www.facebook.com/Icazingplay/posts/pfbid0nWb5...
+        shouldRequestPostId = true;
+        pfbid = link.substr(pos + "posts/".length);
+    } else if ((pos = link.indexOf("posts/")) >= 0){
         //Case https://www.facebook.com/thuvientinhnang/posts/POST_ID
         postId = getFirstNumPhrase(link.substr(pos));
     } else if ((pos = link.indexOf("fbid=")) >= 0){
         //Case https://www.facebook.com/permalink.php?story_fbid=POST_ID&id=PAGE_ID
         postId = getFirstNumPhrase(link.substr(pos));
-    } else if ((pos = link.indexOf("posts/pfbid")) >= 0){
-        //Case https://www.facebook.com/Icazingplay/posts/pfbid0nWb5...
-        shouldRequestPostId = true;
-        pfbid = link.substr(pos + "posts/".length);
-    }
-    else postId = getFirstNumPhrase(link);
+    } else postId = getFirstNumPhrase(link);
 
     if (shouldRequestPostId){
         requestGetPostId(pfbid);
