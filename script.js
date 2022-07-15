@@ -224,7 +224,7 @@ function appendTableComment(comments){
 function getNumberInMessage(message){
     if (!message)
         return "";
-    var arr = message.match(/[-]{0,1}[\d]*[.]{0,1}[\d]+/g);
+    var arr = message.match(/[-]{0,1}[\d]{0,1}[\d]+/g);
     if (arr){
         for(var i = 0; i < arr.length; i++){
             var num = arr[i];
