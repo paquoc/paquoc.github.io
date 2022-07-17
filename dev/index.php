@@ -84,7 +84,7 @@
                         <label for="check-value" class="col-sm-2 col-form-label">Giá trị lọc</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="check-value" value="">
-                            <small class="form-text text-muted"> Nhập giá trị muốn kiểm tra trong bình luận</small>
+                            <small class="form-text text-muted"> Nhập các giá trị muốn kiểm tra trong bình luận, cách nhau bằng dấy phẩy (,)</small>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="" id="whole-word-check">
