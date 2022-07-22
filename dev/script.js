@@ -246,8 +246,12 @@ function checkFilterValue(message){
     if (isWholeWord)
         arr = message.split(/\s+/);
 
-    if (arr.indexOf(filterValue) >= 0)
-        return "x";
+    filterValue = filterValue.split(",");
+    for (var i = 0; i < filterValue.length; i++){
+        if (arr.indexOf(filterValue[i]) >= 0)
+            return "x"; 
+    }
+    
     return "";
 }
 
