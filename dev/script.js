@@ -134,6 +134,7 @@ function getComment(){
         postId: postId,
         commentData: []
     };
+    $('#table-comment').DataTable().clear();
     goFetchComment();
 }
 
@@ -215,7 +216,6 @@ function onFetchFinish(){
 
 function appendTableComment(comments){
     var table = $('#table-comment').DataTable();
-    table.clear();
     table.rows.add(comments);
     table.draw();
     $("#div-table-comment").show();
