@@ -170,7 +170,7 @@ function goFetchComment(afterNode = ""){
 
     let {pageId, postId, accessToken} = SessionData;
     abortCurrentXhr();
-    let limit = $("#limit").val();
+    let limit = 4000;
     SessionData.currentXhr = $.ajax({
         method: "GET",
         url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=${limit}&filter=stream&fields=message,id${afterParam}`,
@@ -258,6 +258,9 @@ function checkFilterValue(message){
 function onError(e, alertMessage = ""){
     SessionData.currentXhr = null;
     setWaitingEnabled(false);
+    if (e.statusText = "abort")
+        return;
+
     if (alertMessage)
         alert(alertMessage);
     if (e)
