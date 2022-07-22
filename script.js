@@ -134,6 +134,7 @@ function getComment(){
         postId: postId,
         commentData: []
     };
+    $('#table-comment').DataTable().clear();
     goFetchComment();
 }
 
@@ -172,7 +173,7 @@ function goFetchComment(afterNode = ""){
     let limit = $("#limit").val();
     SessionData.currentXhr = $.ajax({
         method: "GET",
-        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=${limit}&fields=message,id${afterParam}`,
+        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=${limit}&filter=stream&fields=message,id${afterParam}`,
         success: onFetchComment,
         error: (e)=>{onError(e, "Không lấy được comment");}
     })
@@ -215,7 +216,6 @@ function onFetchFinish(){
 
 function appendTableComment(comments){
     var table = $('#table-comment').DataTable();
-    table.clear();
     table.rows.add(comments);
     table.draw();
     $("#div-table-comment").show();
