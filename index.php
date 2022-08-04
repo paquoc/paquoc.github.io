@@ -32,7 +32,7 @@
             <button class="btn btn-primary" onclick="logout()">Log Out</button>
         </div>
         <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=1258434921313330&autoLogAppEvents=1" nonce="w6xnQUdo"></script>
-        <script src="./script.js?v=20"></script>
+        <script src="./script.js?v=21"></script>
 
         <div class="fb-login-button"
              data-width=""
@@ -69,15 +69,6 @@
                                 </div>
                             </div>
                             <input id="post-link" name="post-link" type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="limit" class="col-sm-2 col-form-label">Giới hạn</label>
-                        <div class="col-sm-6">
-                            <input type="number" class="form-control" id="limit" value="4000">
-                            <small class="form-text text-muted">
-                                Mặc định không cần đổi số này, nếu tool không lấy được hết comment thì mới cần set giới hạn lớn hơn số comment trong bài viết 
-                            </small>
                         </div>
                     </div>
                     <div class="form-group row">
