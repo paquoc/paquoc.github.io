@@ -82,11 +82,12 @@ window.fbAsyncInit = function () {
 
 function getPageList() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
     FB.api('/me/accounts', function (response) {
-        if (response.data.length > 0){
+        if (response.data && response.data.length > 0){
             PageData = response.data;
             createFormSelectPage();
         } else {
             $("#section-get-comment").html(`<p>Bạn không quản lý Page nào.</p>`)
+            $("#section-get-comment").show();
         }
     });
 }
