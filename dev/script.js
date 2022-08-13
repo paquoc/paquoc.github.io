@@ -171,7 +171,7 @@ function goFetchComment(afterNode = ""){
 
     let {pageId, postId, accessToken} = SessionData;
     abortCurrentXhr();
-    let limit = 4000;
+    let limit = $("#limit").val();
     SessionData.currentXhr = $.ajax({
         method: "GET",
         url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=${limit}&filter=stream&fields=message,id${afterParam}`,
