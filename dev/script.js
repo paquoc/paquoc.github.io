@@ -44,7 +44,7 @@ var Options = {
     limit: 1,
     filterValue: "",
     findWholeWord: false,
-    getReplyComment: false
+    ignoreCommentReply: true
 }
 
 /**
@@ -147,7 +147,7 @@ function getComment(){
         limit: $("#limit").val(),
         filterValue: $("#check-value").val(),
         findWholeWord: $("#whole-word-check").prop("checked"),
-        getReplyComment: $("#reply-comment-check").prop("checked"),
+        ignoreCommentReply: $("#ignore-reply-comment-check").prop("checked"),
     }
     goFetchComment();
 }
@@ -185,7 +185,7 @@ function goFetchComment(afterNode = ""){
     let {pageId, postId, accessToken} = SessionData;
     abortCurrentXhr();
     let limit = Options.limit;
-    let filter = Options.getReplyComment? "stream" : "toplevel";
+    let filter = Options.ignoreCommentReply? "toplevel" : "stream";
     SessionData.currentXhr = $.ajax({
         method: "GET",
         url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=${limit}&filter=${filter}&fields=message,id${afterParam}`,
@@ -239,7 +239,7 @@ function appendTableComment(comments){
 function getNumberInMessage(message){
     if (!message)
         return "";
-    var arr = message.match(/[-]{0,1}[\d]{0,1}[\d]+/g);
+    var arr = message.match(/[]{0,1}[\d]{0,1}[\d]+/g);
     if (arr){
         for(var i = 0; i < arr.length; i++){
             var num = arr[i];

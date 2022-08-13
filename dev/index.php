@@ -77,9 +77,9 @@
                             <input type="number" class="form-control" id="limit" value="3000">
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="reply-comment-check" checked>
-                            <label class="form-check-label" for="reply-comment-check">
-                                Lấy luôn comment phản hồi
+                            <input class="form-check-input" type="checkbox" value="" id="ignore-reply-comment-check" checked>
+                            <label class="form-check-label" for="ignore-reply-comment-check">
+                                Không lấy comment phản hồi
                             </label>
                         </div>
                     </div>
