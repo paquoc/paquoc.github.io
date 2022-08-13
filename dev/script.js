@@ -40,6 +40,13 @@ var SessionData = {
     currentXhr: null,
 }
 
+var Options = {
+    limit: 1,
+    filterValue: "",
+    findWholeWord: false,
+    getReplyComment: false
+}
+
 /**
  * @type {PageInfoObject[]}
  */
@@ -136,6 +143,12 @@ function getComment(){
         commentData: []
     };
     $('#table-comment').DataTable().clear();
+    Options = {
+        limit: $("#limit").val(),
+        filterValue: $("#check-value").val(),
+        findWholeWord: $("#whole-word-check").prop("checked"),
+        getReplyComment: $("#reply-comment-check").prop("checked"),
+    }
     goFetchComment();
 }
 
@@ -171,10 +184,11 @@ function goFetchComment(afterNode = ""){
 
     let {pageId, postId, accessToken} = SessionData;
     abortCurrentXhr();
-    let limit = $("#limit").val();
+    let limit = Options.limit;
+    let filter = Options.getReplyComment? "stream" : "toplevel";
     SessionData.currentXhr = $.ajax({
         method: "GET",
-        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=${limit}&filter=stream&fields=message,id${afterParam}`,
+        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=${limit}&filter=${filter}&fields=message,id${afterParam}`,
         success: onFetchComment,
         error: (e)=>{onError(e, "Không lấy được comment");}
     })
@@ -238,11 +252,11 @@ function getNumberInMessage(message){
 }
 
 function checkFilterValue(message){
-    var filterValue = $("#check-value").val();
+    var filterValue = Options.filterValue;
     if (!filterValue)
         return "-";
         
-    var isWholeWord = $("#whole-word-check").prop("checked");
+    var isWholeWord = Options.findWholeWord;
     var arr = message;
     if (isWholeWord)
         arr = message.split(/\s+/);

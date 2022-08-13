@@ -76,6 +76,12 @@
                         <div class="col-sm-6">
                             <input type="number" class="form-control" id="limit" value="3000">
                         </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="reply-comment-check" checked>
+                            <label class="form-check-label" for="reply-comment-check">
+                                Lấy luôn comment phản hồi
+                            </label>
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label for="check-value" class="col-sm-2 col-form-label">Giá trị lọc</label>
