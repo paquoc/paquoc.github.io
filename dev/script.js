@@ -240,6 +240,9 @@ function checkFilterValue(message){
     var filterValue = $("#check-value").val();
     if (!filterValue)
         return "-";
+    
+    message = message.toLowerCase();
+    filterValue = filterValue.toLowerCase();
         
     var isWholeWord = $("#whole-word-check").prop("checked");
     var arr = message;
@@ -258,7 +261,7 @@ function checkFilterValue(message){
 function onError(e, alertMessage = ""){
     SessionData.currentXhr = null;
     setWaitingEnabled(false);
-    if (e.statusText = "abort")
+    if (e.statusText == "abort")
         return;
 
     if (alertMessage)
