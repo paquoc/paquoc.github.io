@@ -40,6 +40,13 @@ var SessionData = {
     currentXhr: null,
 }
 
+var Options = {
+    limit: 1,
+    filterValue: "",
+    findWholeWord: false,
+    ignoreCommentReply: true
+}
+
 /**
  * @type {PageInfoObject[]}
  */
@@ -82,11 +89,12 @@ window.fbAsyncInit = function () {
 
 function getPageList() {                      // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
     FB.api('/me/accounts', function (response) {
-        if (response.data.length > 0){
+        if (response.data && response.data.length > 0){
             PageData = response.data;
             createFormSelectPage();
         } else {
             $("#section-get-comment").html(`<p>Bạn không quản lý Page nào.</p>`)
+            $("#section-get-comment").show();
         }
     });
 }
@@ -135,6 +143,12 @@ function getComment(){
         commentData: []
     };
     $('#table-comment').DataTable().clear();
+    Options = {
+        limit: $("#limit").val(),
+        filterValue: $("#check-value").val(),
+        findWholeWord: $("#whole-word-check").prop("checked"),
+        ignoreCommentReply: $("#ignore-reply-comment-check").prop("checked"),
+    }
     goFetchComment();
 }
 
@@ -170,10 +184,11 @@ function goFetchComment(afterNode = ""){
 
     let {pageId, postId, accessToken} = SessionData;
     abortCurrentXhr();
-    let limit = 4000;
+    let limit = Options.limit;
+    let filter = Options.ignoreCommentReply? "toplevel" : "stream";
     SessionData.currentXhr = $.ajax({
         method: "GET",
-        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=${limit}&filter=stream&fields=message,id${afterParam}`,
+        url: `https://graph.facebook.com/v13.0/${pageId}_${postId}/comments?access_token=${accessToken}&limit=${limit}&filter=${filter}&fields=message,id${afterParam}`,
         success: onFetchComment,
         error: (e)=>{onError(e, "Không lấy được comment");}
     })
@@ -224,7 +239,7 @@ function appendTableComment(comments){
 function getNumberInMessage(message){
     if (!message)
         return "";
-    var arr = message.match(/[-]{0,1}[\d]{0,1}[\d]+/g);
+    var arr = message.match(/[]{0,1}[\d]{0,1}[\d]+/g);
     if (arr){
         for(var i = 0; i < arr.length; i++){
             var num = arr[i];
@@ -237,14 +252,14 @@ function getNumberInMessage(message){
 }
 
 function checkFilterValue(message){
-    var filterValue = $("#check-value").val();
+    var filterValue = Options.filterValue;
     if (!filterValue)
         return "-";
     
     message = message.toLowerCase();
     filterValue = filterValue.toLowerCase();
         
-    var isWholeWord = $("#whole-word-check").prop("checked");
+    var isWholeWord = Options.findWholeWord;
     var arr = message;
     if (isWholeWord)
         arr = message.split(/\s+/);
