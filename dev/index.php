@@ -32,7 +32,7 @@
             <button class="btn btn-primary" onclick="logout()">Log Out</button>
         </div>
         <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v13.0&appId=1258434921313330&autoLogAppEvents=1" nonce="w6xnQUdo"></script>
-        <script src="./script.js?v=22"></script>
+        <script src="./script.js?v=23"></script>
 
         <div class="fb-login-button"
              data-width=""
@@ -77,7 +77,7 @@
                             <input type="number" class="form-control" id="limit" value="3000">
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="ignore-reply-comment-check" checked>
+                            <input class="form-check-input" type="checkbox" value="" id="ignore-reply-comment-check">
                             <label class="form-check-label" for="ignore-reply-comment-check">
                                 Không lấy comment phản hồi
                             </label>

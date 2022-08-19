@@ -255,6 +255,9 @@ function checkFilterValue(message){
     var filterValue = Options.filterValue;
     if (!filterValue)
         return "-";
+    
+    message = message.toLowerCase();
+    filterValue = filterValue.toLowerCase();
         
     var isWholeWord = Options.findWholeWord;
     var arr = message;
@@ -273,7 +276,7 @@ function checkFilterValue(message){
 function onError(e, alertMessage = ""){
     SessionData.currentXhr = null;
     setWaitingEnabled(false);
-    if (e.statusText = "abort")
+    if (e.statusText == "abort")
         return;
 
     if (alertMessage)
