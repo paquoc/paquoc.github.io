@@ -23,6 +23,11 @@
             width: 100%;
             height: 100vh;
         }
+
+        .not-logged #page-select
+        {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -43,13 +48,15 @@
              data-onlogin="checkLoginState()"
              data-scope="pages_show_list, pages_read_engagement, pages_read_user_content"
         ></div>
-
-        <div id="section-get-comment" style="display: none;">
+        <div class="hint-text-without-login" style="display: none">
+            Không thể Login nhưng có Access Token? Click <a href="#" onclick="return showWithoutLoginSection();">here</a>.
+        </div>
+        <div id="section-get-comment" class="not-logged" style="display: none;">
             <div>
                 <form id="form-select-page" class="mt-3">
-                    <fieldset class="form-group">
+                    <div class="form-group" id="page-select">
                         <div class="row">
-                            <legend class="col-form-label col-sm-2 pt-0">Chọn trang: </legend>
+                            <label class="col-form-label col-sm-2 pt-0">Chọn trang: </label>
                             <div class="col-sm-8" id="radio-input-page">
                                 <!-- <div class="form-check">
                                     <input class="form-check-input" type="radio" name="pageOptionRadios" id="option0" value="pageId"
@@ -58,8 +65,18 @@
                                 </div> -->
                             </div>
                         </div>
-                    </fieldset>
-
+                    </div>
+                    <div class="form-group row" id="access-token-input">
+                        <label for="access-token" class="col-sm-2 col-form-label">Access Token</label>
+                        <div class="input-group col-sm-8">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fa fa-key"></i>
+                                </div>
+                            </div>
+                            <input id="access-token" name="access-token" type="password" class="form-control">
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="post-link" class="col-sm-2 col-form-label">Link bài viết</label>
                         <div class="input-group col-sm-8">
@@ -76,12 +93,6 @@
                         <div class="col-sm-6">
                             <input type="number" class="form-control" id="limit" value="3000">
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="ignore-reply-comment-check">
-                            <label class="form-check-label" for="ignore-reply-comment-check">
-                                Không lấy comment phản hồi
-                            </label>
-                        </div>
                     </div>
                     <div class="form-group row">
                         <label for="check-value" class="col-sm-2 col-form-label">Giá trị lọc</label>
@@ -94,6 +105,21 @@
                             <label class="form-check-label" for="whole-word-check">
                                 Tìm nguyên từ
                             </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                            <a data-toggle="collapse" href="#advanced-settings" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                Tùy chỉnh nâng cao
+                            </a>
+                        </div>
+                    </div>
+                    <div class="form-group row collapse" id="advanced-settings">
+                        <label for="advanced-settings-input" class="col-sm-2 col-form-label">JSON Config</label>
+                        <div class="input-group col-sm-8">
+                            <textarea rows="5" id="advanced-settings-input" onchange="formatTextArea(this)" style="font-family: monospace; font-size: 14px"
+                                      name="group-config" class="form-control"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -116,6 +142,7 @@
                             <th style="max-width: 15px">STT</th>
                             <th>Message</th>
                             <th>UserID</th>
+                            <th>Nhóm</th>
                             <th>Chứa giá trị lọc?</th>
                             <th>Link</th>
                         </tr>

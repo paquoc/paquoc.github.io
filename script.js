@@ -44,7 +44,12 @@ var Options = {
     limit: 1,
     filterValue: "",
     findWholeWord: false,
-    ignoreCommentReply: true
+    ignoreCommentReply: true,
+}
+
+var Config = {
+    userIDLen: {from: 6, to: 9},
+    groups: {}
 }
 
 /**
@@ -54,6 +59,7 @@ var PageData = [];
 
 $(document).ready(function (){
     initDataTable();
+    initTextArea();
     // createFormSelectPage()
 })
 
@@ -63,6 +69,8 @@ function statusChangeCallback(response) {  // Called with the results from FB.ge
         getPageList();
         $(".fb-login-button").hide();
         $("#btn-logout").show();
+    } else {
+        $(".hint-text-without-login").show();
     }
 }
 
@@ -236,14 +244,19 @@ function appendTableComment(comments){
     $("#div-table-comment").show();
 }
 
-function getNumberInMessage(message){
+function getUserIdInMessage(message){
     if (!message)
         return "";
+    if (!Config || !Config.userIDLen){
+        alert("Thiếu config độ dài UserID");
+        return;
+    }
+
     var arr = message.match(/[]{0,1}[\d]{0,1}[\d]+/g);
     if (arr){
         for(var i = 0; i < arr.length; i++){
             var num = arr[i];
-            if (num.length >= 6 && num.length <= 9){
+            if (num.length >= Config.userIDLen.from && num.length <= Config.userIDLen.to){
                 return num;
             }
         }
@@ -319,7 +332,12 @@ function initDataTable() {
             {
                 targets: id++,
                 data: "message",
-                render: data => getNumberInMessage(data)
+                render: data => getUserIdInMessage(data)
+            },
+            {
+                targets: id++,
+                data: "message",
+                render: data => divideToGroup(data)
             },
             {
                 targets: id++,
@@ -337,5 +355,63 @@ function initDataTable() {
             }
         ]
     });
+}
 
+function showWithoutLoginSection(){
+    $("#section-get-comment").show();
+    return false;
+}
+
+function initTextArea(){
+    document.getElementById('advanced-settings-input')
+        .addEventListener('keydown', function(e) {
+        if (e.key == 'Tab') {
+            e.preventDefault();
+            var start = this.selectionStart;
+            var end = this.selectionEnd;
+
+            // set textarea value to: text before caret + tab + text after caret
+            this.value = this.value.substring(0, start) +
+                "\t" + this.value.substring(end);
+
+            // put caret at right position again
+            this.selectionStart =
+                this.selectionEnd = start + 1;
+        }
+    });
+    $("#advanced-settings-input").val(JSON.stringify(Config, null, 4));
+}
+
+function divideToGroup(message){
+    if (!Config || !Config.groups)
+        return "";
+    if (typeof Config.groups !== "object")
+        return "";
+
+    for(let group in Config.groups){
+        let searchTexts = Config.groups[group];
+        if (typeof searchTexts == "string")
+            searchTexts = [searchTexts];
+        for(let i = 0; i < searchTexts.length; i++){
+            if (message.indexOf(searchTexts[i]) >= 0)
+                return group;
+        }
+    }
+    return "";
+}
+
+function formatTextArea(textarea){
+    textarea = $(textarea);
+    var text = textarea.val();
+    var obj = null;
+    try {
+        obj = JSON.parse(text);
+    } catch (e){}
+
+    if (obj) {
+        var newStr = JSON.stringify(obj, null, 4);
+        textarea.val(newStr)
+    } else {
+        alert("Có lỗi trong chuỗi JSON config, vui lòng kiểm tra lại");
+    }
 }
