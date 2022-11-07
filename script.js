@@ -211,6 +211,28 @@ function goFetchComment(afterNode = ""){
     })
 }
 
+function goFetchPageId(accessToken){
+    abortCurrentXhr();
+    SessionData.currentXhr = $.ajax({
+        method: "GET",
+        url: `https://graph.facebook.com/v14.0/me?access_token=${accessToken}`,
+        success: onFetchPageId,
+        error: (e)=>{onError(e, "Không lấy được pageId");}
+    })
+}
+
+function onFetchPageId(response){
+    SessionData.currentXhr = null;
+    //Check error?
+    if (response.error){
+        onError(response, "Không thể lấy pageId, vui lòng kiểm tra lại Access Token");
+        return;
+    }
+
+    SessionData.pageId = response.id;
+    goFetchComment();
+}
+
 function abortCurrentXhr(turnOffWaitingStatus = false){
     if (SessionData.currentXhr){
         SessionData.currentXhr.abort();
