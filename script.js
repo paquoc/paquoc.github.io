@@ -462,3 +462,24 @@ function formatTextArea(textarea){
         alert("Có lỗi trong chuỗi JSON config, vui lòng kiểm tra lại");
     }
 }
+
+function onEnterAccessToken(){
+    let accessToken = $("#access-token").val();
+    if (!accessToken)
+        return;
+    $.ajax({
+        method: "GET",
+        url: `https://graph.facebook.com/v14.0/me?access_token=${accessToken}`,
+        success: function(response){
+            let accountInfo = $("#account-info");
+            if (response.error){
+                accountInfo.text("Không lấy được page info");
+            } else {
+                accountInfo.text("Profile: " + response.name);
+            }
+        },
+        error: (e)=>{
+
+        }
+    })
+}
