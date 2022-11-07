@@ -65,11 +65,14 @@ $(document).ready(function (){
 
 function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
     console.log(response);                   // The current login status of the person.
+    let section = $("#section-get-comment");
     if (response.status === 'connected') {   // Logged into your webpage and Facebook.
         getPageList();
         $(".fb-login-button").hide();
         $("#btn-logout").show();
+        section.addClass("logged");
     } else {
+        section.addClass("not-logged");
         $(".hint-text-without-login").show();
     }
 }
@@ -101,8 +104,7 @@ function getPageList() {                      // Testing Graph API after login. 
             PageData = response.data;
             createFormSelectPage();
         } else {
-            $("#section-get-comment").html(`<p>Bạn không quản lý Page nào.</p>`)
-            $("#section-get-comment").show();
+            $("#section-get-comment").html(`<p>Bạn không quản lý Page nào.</p>`).show();
         }
     });
 }
@@ -129,12 +131,10 @@ function createFormSelectPage() {
 function getComment(){
     $("#div-table-comment").hide();
     setWaitingEnabled(true);
-    var pageId = $("#form-select-page input[type='radio']:checked").val();
-    var pageInfo = PageData.find(page => page.id == pageId);
-    if (!pageInfo)
-        return;
-
-    var accessToken = pageInfo.access_token;
+    var accessToken = _getAccessToken();
+    if (!accessToken){
+        return alert("Không thể lấy Access Token, vui lòng kiểm tra lại");
+    }
 
     let link = $("#post-link").val();
     var postId = getPostId(link);
@@ -158,6 +158,15 @@ function getComment(){
         ignoreCommentReply: $("#ignore-reply-comment-check").prop("checked"),
     }
     goFetchComment();
+}
+
+function _getAccessToken(){
+    var pageId = $("#form-select-page input[type='radio']:checked").val();
+    var pageInfo = PageData.find(page => page.id == pageId);
+    if (!pageInfo)
+        return null;
+
+    return pageInfo.access_token;
 }
 
 function getPostId(link){

@@ -24,8 +24,11 @@
             height: 100vh;
         }
 
-        .not-logged #page-select
-        {
+        #section-get-comment.not-logged #page-select{
+            display: none;
+        }
+
+        #section-get-comment.logged #access-token-input {
             display: none;
         }
     </style>
@@ -51,7 +54,7 @@
         <div class="hint-text-without-login" style="display: none">
             Không thể Login nhưng có Access Token? Click <a href="#" onclick="return showWithoutLoginSection();">here</a>.
         </div>
-        <div id="section-get-comment" class="not-logged" style="display: none;">
+        <div id="section-get-comment" style="display: none;">
             <div>
                 <form id="form-select-page" class="mt-3">
                     <div class="form-group" id="page-select">
@@ -118,7 +121,7 @@
                     <div class="form-group row collapse" id="advanced-settings">
                         <label for="advanced-settings-input" class="col-sm-2 col-form-label">JSON Config</label>
                         <div class="input-group col-sm-8">
-                            <textarea rows="5" id="advanced-settings-input" onchange="formatTextArea(this)" style="font-family: monospace; font-size: 14px"
+                            <textarea rows="7" id="advanced-settings-input" onchange="formatTextArea(this)" style="font-family: monospace; font-size: 14px"
                                       name="group-config" class="form-control"></textarea>
                         </div>
                     </div>
