@@ -66,14 +66,16 @@ $(document).ready(function (){
 function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
     console.log(response);                   // The current login status of the person.
     let section = $("#section-get-comment");
+    let hintText =  $(".hint-text-without-login");
     if (response.status === 'connected') {   // Logged into your webpage and Facebook.
         getPageList();
         $(".fb-login-button").hide();
         $("#btn-logout").show();
-        section.addClass("logged");
+        section.removeClass("not-logged").addClass("logged");
+        hintText.hide();
     } else {
-        section.addClass("not-logged");
-        $(".hint-text-without-login").show();
+        section.removeClass("logged").addClass("not-logged");
+        hintText.show();
     }
 }
 
@@ -151,7 +153,7 @@ function _setUpSessionDataAndGoOn(){
     if (pageId){
         SessionData.pageId = pageId;
         var pageInfo = PageData.find(page => page.id == pageId);
-        if (!pageInfo){
+        if (pageInfo){
             SessionData.accessToken = pageInfo.access_token;
             goFetchComment();
             return;
