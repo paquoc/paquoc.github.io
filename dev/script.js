@@ -118,7 +118,7 @@ function createFormSelectPage() {
     $("#section-get-comment").show();
 }
 
-function getComment(){
+function submitForm(){
     $("#div-table-comment").hide();
     setWaitingEnabled(true);
     var pageId = $("#form-select-page input[type='radio']:checked").val();

@@ -128,14 +128,16 @@ function createFormSelectPage() {
     $("#section-get-comment").show();
 }
 
-function getComment(){
+function submitForm(){
     $("#div-table-comment").hide();
     setWaitingEnabled(true);
-    var accessToken = _getAccessToken();
-    if (!accessToken){
-        return alert("Không thể lấy Access Token, vui lòng kiểm tra lại");
-    }
+    $('#table-comment').DataTable().clear();
+    _setUpOptions();
+    _setUpSessionDataAndGoOn();
+}
 
+function _setUpSessionDataAndGoOn(){
+    SessionData.commentData = [];
     let link = $("#post-link").val();
     var postId = getPostId(link);
 
@@ -143,30 +145,40 @@ function getComment(){
         onError(null, "Thiếu link bài viết");
         return;
     }
+    SessionData.postId = postId;
 
-    SessionData = {
-        accessToken: accessToken,
-        pageId: pageId,
-        postId: postId,
-        commentData: []
-    };
-    $('#table-comment').DataTable().clear();
+    var pageId = $("#form-select-page input[type='radio']:checked").val();
+    if (pageId){
+        SessionData.pageId = pageId;
+        var pageInfo = PageData.find(page => page.id == pageId);
+        if (!pageInfo){
+            SessionData.accessToken = pageInfo.access_token;
+            goFetchComment();
+            return;
+        }
+    } else {
+        let accessToken = $("#access-token").val();
+        if (accessToken){
+            SessionData.accessToken = accessToken;
+            goFetchPageId(accessToken);
+            return;
+        }
+    }
+    alert("Không thể lấy pageId, vui lòng kiểm tra lại Access Token");
+}   
+
+function _setUpOptions(){
+    let jsonStr = $("#advanced-settings-input").val();
+    try {
+        let config = JSON.parse(jsonStr);
+        Config = config;
+    } catch (e){}
     Options = {
         limit: $("#limit").val(),
         filterValue: $("#check-value").val(),
         findWholeWord: $("#whole-word-check").prop("checked"),
         ignoreCommentReply: $("#ignore-reply-comment-check").prop("checked"),
     }
-    goFetchComment();
-}
-
-function _getAccessToken(){
-    var pageId = $("#form-select-page input[type='radio']:checked").val();
-    var pageInfo = PageData.find(page => page.id == pageId);
-    if (!pageInfo)
-        return null;
-
-    return pageInfo.access_token;
 }
 
 function getPostId(link){
@@ -279,7 +291,7 @@ function getUserIdInMessage(message){
     if (!message)
         return "";
     if (!Config || !Config.userIDLen){
-        alert("Thiếu config độ dài UserID");
+        console.error("Thiếu config độ dài UserID");
         return;
     }
 
@@ -389,6 +401,8 @@ function initDataTable() {
 }
 
 function showWithoutLoginSection(){
+    $(".fb-login-button").hide();
+    $(".hint-text-without-login").hide();
     $("#section-get-comment").show();
     return false;
 }

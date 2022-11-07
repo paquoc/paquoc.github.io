@@ -97,7 +97,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button name="submit" type="button" class="btn btn-primary" onclick="getComment()">Submit</button>
+                        <button name="submit" type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
                     </div>
                 </form>
             </div>
