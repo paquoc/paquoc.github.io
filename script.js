@@ -440,12 +440,25 @@ function divideToGroup(message){
         if (typeof searchTexts == "string")
             searchTexts = [searchTexts];
         for(let i = 0; i < searchTexts.length; i++){
-            if (message.indexOf(searchTexts[i]) >= 0)
+            if (checkPatternInComment(message, searchTexts[i]))
                 return group;
         }
     }
     return "";
 }
+
+function checkPatternInComment(msg, pattern){
+    msg = removeAccents(msg).toLowerCase();
+    pattern = removeAccents(pattern).toLowerCase();
+    return msg.indexOf(pattern) >= 0;
+}
+
+function removeAccents(str) {
+    return str.normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+}
+
 
 function formatTextArea(textarea){
     textarea = $(textarea);
