@@ -6,11 +6,8 @@
  *
  * @typedef {{
  *      access_token: string,
- *      category: string,
- *      category_list: {id, name}[],
  *      id: string,
  *      name: string,
- *      tasks: string[]
  * }} PageInfoObject
  *
  * @typedef {{
@@ -52,29 +49,29 @@ var Config = {
     groups: {}
 }
 
+/** @type {{error, warning, success}} */
+var toastr = toastr || {};
 /**
  * @type {PageInfoObject[]}
  */
 var PageData = [];
 
-$(document).ready(function (){
+$(function (){
     initDataTable();
     initTextArea();
-    // createFormSelectPage()
+    initAccessTokenInput();
+    initToastr();
 })
 
 function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
     console.log(response);                   // The current login status of the person.
-    let section = $("#section-get-comment");
     let hintText =  $(".hint-text-without-login");
     if (response.status === 'connected') {   // Logged into your webpage and Facebook.
         getPageList();
         $(".fb-login-button").hide();
         $("#btn-logout").show();
-        section.removeClass("not-logged").addClass("logged");
         hintText.hide();
     } else {
-        section.removeClass("logged").addClass("not-logged");
         hintText.show();
     }
 }
@@ -133,13 +130,13 @@ function createFormSelectPage() {
 function submitForm(){
     $("#div-table-comment").hide();
     setWaitingEnabled(true);
-    $('#table-comment').DataTable().clear();
-    _setUpOptions();
-    _setUpSessionDataAndGoOn();
-}
+    var pageId = $("#form-select-page input[type='radio']:checked").val();
+    var pageInfo = PageData.find(page => page.id == pageId);
+    if (!pageInfo)
+        return;
 
-function _setUpSessionDataAndGoOn(){
-    SessionData.commentData = [];
+    var accessToken = pageInfo.access_token;
+
     let link = $("#post-link").val();
     var postId = getPostId(link);
 
@@ -147,40 +144,21 @@ function _setUpSessionDataAndGoOn(){
         onError(null, "Thiếu link bài viết");
         return;
     }
-    SessionData.postId = postId;
 
-    var pageId = $("#form-select-page input[type='radio']:checked").val();
-    if (pageId){
-        SessionData.pageId = pageId;
-        var pageInfo = PageData.find(page => page.id == pageId);
-        if (pageInfo){
-            SessionData.accessToken = pageInfo.access_token;
-            goFetchComment();
-            return;
-        }
-    } else {
-        let accessToken = $("#access-token").val();
-        if (accessToken){
-            SessionData.accessToken = accessToken;
-            goFetchPageId(accessToken);
-            return;
-        }
-    }
-    alert("Không thể lấy pageId, vui lòng kiểm tra lại Access Token");
-}   
-
-function _setUpOptions(){
-    let jsonStr = $("#advanced-settings-input").val();
-    try {
-        let config = JSON.parse(jsonStr);
-        Config = config;
-    } catch (e){}
+    SessionData = {
+        accessToken: accessToken,
+        pageId: pageId,
+        postId: postId,
+        commentData: []
+    };
+    $('#table-comment').DataTable().clear();
     Options = {
         limit: $("#limit").val(),
         filterValue: $("#check-value").val(),
         findWholeWord: $("#whole-word-check").prop("checked"),
         ignoreCommentReply: $("#ignore-reply-comment-check").prop("checked"),
     }
+    goFetchComment();
 }
 
 function getPostId(link){
@@ -223,28 +201,6 @@ function goFetchComment(afterNode = ""){
         success: onFetchComment,
         error: (e)=>{onError(e, "Không lấy được comment");}
     })
-}
-
-function goFetchPageId(accessToken){
-    abortCurrentXhr();
-    SessionData.currentXhr = $.ajax({
-        method: "GET",
-        url: `https://graph.facebook.com/v14.0/me?access_token=${accessToken}`,
-        success: onFetchPageId,
-        error: (e)=>{onError(e, "Không lấy được pageId");}
-    })
-}
-
-function onFetchPageId(response){
-    SessionData.currentXhr = null;
-    //Check error?
-    if (response.error){
-        onError(response, "Không thể lấy pageId, vui lòng kiểm tra lại Access Token");
-        return;
-    }
-
-    SessionData.pageId = response.id;
-    goFetchComment();
 }
 
 function abortCurrentXhr(turnOffWaitingStatus = false){
@@ -338,7 +294,7 @@ function onError(e, alertMessage = ""){
         return;
 
     if (alertMessage)
-        alert(alertMessage);
+        toastr.error(alertMessage);
     if (e)
         console.log(e);
 }
@@ -405,7 +361,7 @@ function initDataTable() {
 function showWithoutLoginSection(){
     $(".fb-login-button").hide();
     $(".hint-text-without-login").hide();
-    $("#section-get-comment").show();
+    $("#form-access-token").show();
     return false;
 }
 
@@ -476,23 +432,53 @@ function formatTextArea(textarea){
     }
 }
 
-function onEnterAccessToken(){
-    let accessToken = $("#access-token").val();
-    if (!accessToken)
-        return;
+function submitAccessToken(){
+    let accessToken = $("#access-token-input").val();
+    goFetchPageId(accessToken);
+}
+
+function goFetchPageId(accessToken){
     $.ajax({
         method: "GET",
-        url: `https://graph.facebook.com/v14.0/me?access_token=${accessToken}`,
-        success: function(response){
-            let accountInfo = $("#account-info");
-            if (response.error){
-                accountInfo.text("Không lấy được page info");
-            } else {
-                accountInfo.text("Profile: " + response.name);
-            }
-        },
-        error: (e)=>{
-
-        }
+        url: `https://graph.facebook.com/v13.0/me?access_token=${accessToken}`,
+        success: function(response){ onFetchPageId(response, accessToken)},
+        error: (e)=>{onError(e, "Không lấy được pageId");}
     })
+}
+
+function onFetchPageId(response, accessToken){
+    if (response.error){
+        onError(response, "Không thể lấy pageId, vui lòng kiểm tra lại Access Token");
+        return;
+    }
+
+    PageData = [{
+        access_token: accessToken,
+        id: response.id,
+        name: response.name
+    }];
+    $("#form-access-token").hide();
+    createFormSelectPage();
+}
+
+function initAccessTokenInput(){
+    $("#access-token-input").on("keypress", function (e){
+        if (e.key == "Enter"){
+            $("#submit-access-token").click();
+        }
+    });
+}
+
+function initToastr(){
+    toastr.options = {
+        closeButton: true,
+        newestOnTop: true,
+        progressBar: true,
+        positionClass: "toast-top-center",
+        preventDuplicates: false,
+        showDuration: 200,
+        hideDuration: 200,
+        timeOut: 2500,
+        extendedTimeOut: 2000,
+    };
 }
