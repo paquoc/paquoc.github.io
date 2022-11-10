@@ -459,6 +459,7 @@ function removeAccents(str) {
             .replace(/đ/g, 'd').replace(/Đ/g, 'D');
 }
 
+
 function formatTextArea(textarea){
     textarea = $(textarea);
     var text = textarea.val();
