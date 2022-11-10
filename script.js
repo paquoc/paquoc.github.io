@@ -290,7 +290,7 @@ function checkFilterValue(message){
 function onError(e, alertMessage = ""){
     SessionData.currentXhr = null;
     setWaitingEnabled(false);
-    if (e.statusText == "abort")
+    if (e && e.statusText == "abort")
         return;
 
     if (alertMessage)
@@ -442,13 +442,13 @@ function goFetchPageId(accessToken){
         method: "GET",
         url: `https://graph.facebook.com/v13.0/me?access_token=${accessToken}`,
         success: function(response){ onFetchPageId(response, accessToken)},
-        error: (e)=>{onError(e, "Không lấy được pageId");}
+        error: (e)=>{onError(e, "Không lấy được thông tin Page, vui lòng kiểm tra lại Access Token");}
     })
 }
 
 function onFetchPageId(response, accessToken){
     if (response.error){
-        onError(response, "Không thể lấy pageId, vui lòng kiểm tra lại Access Token");
+        onError(response, "Không thể lấy thông tin Page, vui lòng kiểm tra lại Access Token");
         return;
     }
 
