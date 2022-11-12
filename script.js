@@ -55,6 +55,7 @@ var toastr = toastr || {};
  * @type {PageInfoObject[]}
  */
 var PageData = [];
+console.log("v1");
 
 $(function (){
     initDataTable();
