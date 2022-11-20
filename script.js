@@ -219,7 +219,6 @@ function abortCurrentXhr(turnOffWaitingStatus = false){
  */
 function onFetchComment(response){
     SessionData.currentXhr = null;
-    //Check error?
     if (response.error){
         onError(response, response.error.message);
         return;
@@ -229,6 +228,7 @@ function onFetchComment(response){
     appendTableComment(response.data);
     if (response.paging && response.paging.next && response.paging.cursors){
         let afterNode = response.paging.cursors.after;
+        toastr.success(`Đã lấy được <span class="font-weight-bold">${SessionData.commentData.length}</span> bình luận`);
         goFetchComment(afterNode);
     } else {
         onFetchFinish();
@@ -236,6 +236,7 @@ function onFetchComment(response){
 }
 
 function onFetchFinish(){
+    toastr.success(`Đã lấy XONG, tổng cộng <span class="font-weight-bold">${SessionData.commentData.length}</span> bình luận`);
     setWaitingEnabled(false);
 }
 
