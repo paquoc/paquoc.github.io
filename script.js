@@ -58,6 +58,7 @@ var PageData = [];
 console.log("v1");
 
 $(function (){
+    initEvents();
     initDataTable();
     initTextArea();
     initAccessTokenInput();
@@ -153,13 +154,23 @@ function submitForm(){
         commentData: []
     };
     $('#table-comment').DataTable().clear();
+    setUpOptionsAndConfig();
+    goFetchComment();
+}
+
+function setUpOptionsAndConfig(){
+    let jsonStr = $("#advanced-settings-input").val();
+    try {
+        let config = JSON.parse(jsonStr);
+        Config = config;
+    } catch (e){}
+
     Options = {
         limit: $("#limit").val(),
         filterValue: $("#check-value").val(),
         findWholeWord: $("#whole-word-check").prop("checked"),
         ignoreCommentReply: $("#ignore-reply-comment-check").prop("checked"),
     }
-    goFetchComment();
 }
 
 function getPostId(link){
@@ -316,6 +327,15 @@ function logout(){
     $("#section-get-comment").hide();
 }
 
+function initEvents(){
+    $("#btn-logout button").on("click", logout);
+    $("#submit-access-token").on("click", submitAccessToken);
+    $("#section-get-comment button[name=submit]").on("click", submitForm);
+    $("#div-loading button[name=stop]").on("click", ()=>abortCurrentXhr(true));
+    $(".hint-text-without-login").on("click", showWithoutLoginSection);
+    $("#advanced-settings-input").on("change", formatTextArea);
+}
+
 function initDataTable() {
     var id = 0;
     $('#table-comment').DataTable({
@@ -418,8 +438,8 @@ function removeAccents(str) {
 }
 
 
-function formatTextArea(textarea){
-    textarea = $(textarea);
+function formatTextArea(){
+    textarea = $(this);
     var text = textarea.val();
     var obj = null;
     try {
